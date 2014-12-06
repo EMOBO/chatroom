@@ -14,37 +14,28 @@
 			ip: '127.0.0.1',
 			portaddr: '3000'
 		};
-		//按下Enter
-		$('#login-form').keydown(function(e) {
-			if (e.keyCode === 13) {
-				$('#btn-login').click();
-			}
-		});
-		//login
-		$('#btn-login').on('click', function() {
+
+		//登出时间触发
+		$('#logout').on('click', function() {
 			var _username = $('#login-user input').val();
 			var _password = $('#login-password input').val();
 			//login data
-			_data = {
-				username: _username,
-				password: _password
-			};
+			_data =  getUser();
 			//package message
-			var message = packageMessage('login', _source, _destination, _cookie, _data);
+			var message = packageMessage('logout', _source, _destination, _cookie, _data);
 			//emit
 			socket.emit('message', message);
 		});
 
+		//接受报文
 		socket.on('response', function(response) {
 			console.log(response);
-			if (response.statusCode == 204) {
+			if (response.statusCode == 304) {
 				alert(response.data);
-				$('#login-password input').val('');
 			}
-			if (response.statusCode == 200) {
-				alert('欢迎回来 ' + response.data + ' !');
-				USERNAME = response.data;
-				window.location = '/chat?' + USERNAME;
+			if (response.statusCode == 300) {
+				alert('退出成功，欢迎下次再来！');
+				window.location = '/';
 			}
 		});
 	});

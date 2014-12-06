@@ -64,14 +64,14 @@
 				}
 			);
 		}
-		/**
-		 *  清屏函数
-		 **/
+
+	/**
+	 *  清屏函数
+	 **/
 	function cleanScreen() {
 		$('#chat-dynamic').empty();
 		$('#chat-dynamic').append("<p style='font-weight:bold;font-size:20px;text-align:center;')> 系统：欢迎来到聊天室大厅</p>");
 	}
-
 
 	/*	*
 	 *	get online chaters list
@@ -229,6 +229,11 @@
 		}
 	});
 
+	//主动获取chatList
+	$(document).ready(function(){  
+    setUser();
+    getChatList();  
+	}); 
 	/**
 	 *  发送消息
 	 **/
@@ -280,17 +285,6 @@
 	});
 
 
-})();;(function(){
-	var socket = io();
-	$("#message-send").click(function() {
-		console.log($("#message-input").val());
-		socket.emit('chat message', $("#message-input").val());
-		$("message-input").val('');
-	});
-	socket.on('chat message', function(msg) {
-		console.log(msg);
-		$("#chatroom").append($("<p>").text(msg));
-	});
 })();;(function() {
 	var socket = io();
 	var _source = '';
@@ -332,32 +326,77 @@
 			console.log(response);
 			if (response.statusCode == 204) {
 				alert(response.data);
-				$('#login-user input').val('');
 				$('#login-password input').val('');
 			}
 			if (response.statusCode == 200) {
+				alert('欢迎回来 ' + response.data + ' !');
+				USERNAME = response.data;
+				window.location = '/chat?' + USERNAME;
+			}
+		});
+	});
+})();;(function() {
+	var socket = io();
+	var _source = '';
+	var _destination = '';
+	var _cookie = 'null cookie';
+	var _data = '';
+	//welcome socket
+	socket.on('welcome', function(userIp) {
+		_source = {
+			ip: userIp,
+			portaddr: '8888'
+		};
+		_destination = {
+			ip: '127.0.0.1',
+			portaddr: '3000'
+		};
+
+		//登出时间触发
+		$('#logout').on('click', function() {
+			var _username = $('#login-user input').val();
+			var _password = $('#login-password input').val();
+			//login data
+			_data =  getUser();
+			//package message
+			var message = packageMessage('logout', _source, _destination, _cookie, _data);
+			//emit
+			socket.emit('message', message);
+		});
+
+		//接受报文
+		socket.on('response', function(response) {
+			console.log(response);
+			if (response.statusCode == 304) {
 				alert(response.data);
-				window.location = '/chat';
+			}
+			if (response.statusCode == 300) {
+				alert('退出成功，欢迎下次再来！');
+				window.location = '/';
 			}
 		});
 	});
 })();;(function() {
 	var socket = io();
 	socket.on('welcome', function(ip) {
+		//注册
 		$('#register-apply').on('click', function() {
 			var username = $('#register-username input').val();
 			var password = $('#register-password input').val();
 									USERNAME = username;
 			var passwordComfirm = $('#register-password-confirm input').val();
 			console.log('username:' + username + '|password:' + password + '|passwordComfirm:' + passwordComfirm);
+			//是否为空
 			if ((password === '') || (username === '')) {
 				alert('密码和用户名不能为空，请重新输入！');
 				clear();
 			} else {
+				//面膜六位以上
 				if (password.length < 6) {
 					alert('密码至少为6位，请重新输入！');
 					clear();
 				} else {
+					//两次输入密码是否相同
 					if (password == passwordComfirm) {
 						var user = {
 							username: username,
@@ -395,7 +434,14 @@
 			}
 			if (response.statusCode == 100) {
 				alert('恭喜！注册成功！');
-				window.location = '/chat';
+				window.location = '/chat?'+$('#register-username input').val();
+			}
+		});
+
+		//按下Enter
+		$('#register-form').keydown(function(e) {
+			if (e.keyCode === 13) {
+				$('#register-apply').click();
 			}
 		});
 	});

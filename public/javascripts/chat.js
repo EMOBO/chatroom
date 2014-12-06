@@ -64,14 +64,14 @@
 				}
 			);
 		}
-		/**
-		 *  清屏函数
-		 **/
+
+	/**
+	 *  清屏函数
+	 **/
 	function cleanScreen() {
 		$('#chat-dynamic').empty();
 		$('#chat-dynamic').append("<p style='font-weight:bold;font-size:20px;text-align:center;')> 系统：欢迎来到聊天室大厅</p>");
 	}
-
 
 	/*	*
 	 *	get online chaters list
@@ -229,6 +229,11 @@
 		}
 	});
 
+	//主动获取chatList
+	$(document).ready(function(){  
+    setUser();
+    getChatList();  
+	}); 
 	/**
 	 *  发送消息
 	 **/
