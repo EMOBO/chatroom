@@ -1,0 +1,27 @@
+extends layout
+
+block content
+  div#chatroom
+    h4#online-list-header ★私聊对象★
+    div#online-list-body
+      table.table.table-hover
+        tbody
+
+    div#separator
+
+    div#chat-body
+      div#chat-box
+        div#chat-dynamic
+          p(style='font-weight:bold;font-size:20px;text-align:center;') 系统：欢迎来到聊天室大厅
+      div#message-box
+        input.form-control(type = 'text' placeholder='按下Enter发送消息(支持HTML标签解析)，按下Esc清屏')
+      div#chat-btns
+        .btn-group.dropup
+          button#send-message.btn.btn-primary 发送
+          button#dropdown-upload.btn.dropdown-toggle(data-toggle="dropdown" style="margin-right: 50px;")
+            span.caret
+          ul.dropdown-menu(role='menu' aria-labelledby='dropdown-upload')
+            input#file-upload(type="file" name="file")
+        button(style='margin-right: 50px;')#clean-box.btn.btn-primary 清屏
+        button#logout.btn.btn-danger 登出
+

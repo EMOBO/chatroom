@@ -10,9 +10,9 @@ exports.handle = function (socket, message, chatList) {
 		ip: message.source.ip,
 		port: message.source.port
 	};
-	if (chatList.namelist != []) {
+	if (chatList.userlist != []) {
 		_statusCode = 400;
-		_data = chatList.namelist;
+		_data = chatList.userlist;
 		response = msgHandler.packageResponseMessage(_statusCode, _source, _destination, _data);
 	} else {
 		_statusCode = 404;

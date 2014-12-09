@@ -58,6 +58,7 @@ db.getConnection(function(db) {
     app.use('/', require('./routes/index'));
     app.use('/register', require('./routes/register'));
     app.use('/chat', require('./routes/chat'));
+    app.use('/P2P', require('./routes/P2P'));
 
     //启动服务器(绑定socket.io)
     var server = require('http').Server(app);
@@ -82,6 +83,7 @@ db.getConnection(function(db) {
                     break;
                     //广播消息
                 case 'broadcast':
+                    console.log(message);
                     broadcastHandler.handle(socket, message);
                     break;
                     //登陆

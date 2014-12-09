@@ -21,7 +21,13 @@ exports.handle = function(socket, message, chatList){
 			if(data.password == encryp(message.data.password)){
 				_statusCode = 200;
 				_data = message.data.username;
-				chatList.add(message.data.username);
+				var usrObj = {
+					username: message.data.username,
+					ip: message.source.ip,
+					port: message.source.port
+				};
+				chatList.add(usrObj);
+				console.log(chatList);
 			} else {
 				_statusCode = 204;
 				_data = '密码错误，请输入正确密码！';

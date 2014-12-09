@@ -44,7 +44,7 @@
 			if (response.statusCode == 200) {
 				alert('欢迎回来 ' + response.data + ' !');
 				USERNAME = response.data;
-				window.location = '/chat?' + USERNAME;
+				window.location = '/chat?username=' + USERNAME;
 			}
 		});
 	});

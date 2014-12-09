@@ -4,7 +4,7 @@ var USERNAME = 'Mr.X';
  **/
 function setUser() {
     var url = window.location.toString();
-    var info = url.split('?');
+    var info = url.split('?username=');
     if(info.length > 1){
         USERNAME = info[1];
     }

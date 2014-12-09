@@ -20,50 +20,50 @@
 
 	/************************************ function ********************************/
 	function message(type, cont, filename) {
-			var content;
-			var username = USERNAME;
-			var date = new Date(),
-				time;
-			var hour = date.getHours(),
-				minute = date.getMinutes(),
-				seconds = date.getSeconds();
-			var hour_str = (hour > 9) ? hour.toString() : ('0' + hour.toString()),
-				minute_str = (minute > 9) ? minute.toString() : ('0' + minute.toString()),
-				seconds_str = (seconds > 9) ? seconds.toString() : ('0' + seconds.toString());
-			switch (type) {
-				case FILE_TYPE:
-					content = {
-						type: FILE_TYPE,
-						filename: filename,
-						filesize: file.size,
-						content: cont
-					};
-					break;
-				case TEXT_TYPE:
-					content = {
-						type: TEXT_TYPE,
-						content: cont
-					};
-					break;
-			}
-
-			if (hour > 12) {
-				time = hour_str + ':' + minute_str + ':' + seconds_str + '  PM';
-			} else {
-				time = hour_str + ':' + minute_str + ':' + seconds_str + '  AM';
-			}
-
-			return packageMessage(
-				'broadcast',
-				_source,
-				_destination,
-				_cookie, {
-					username: username,
-					time: time,
-					content: content
-				}
-			);
+		var content;
+		var username = USERNAME;
+		var date = new Date(),
+			time;
+		var hour = date.getHours(),
+			minute = date.getMinutes(),
+			seconds = date.getSeconds();
+		var hour_str = (hour > 9) ? hour.toString() : ('0' + hour.toString()),
+			minute_str = (minute > 9) ? minute.toString() : ('0' + minute.toString()),
+			seconds_str = (seconds > 9) ? seconds.toString() : ('0' + seconds.toString());
+		switch (type) {
+			case FILE_TYPE:
+				content = {
+					type: FILE_TYPE,
+					filename: filename,
+					filesize: file.size,
+					content: cont
+				};
+				break;
+			case TEXT_TYPE:
+				content = {
+					type: TEXT_TYPE,
+					content: cont
+				};
+				break;
 		}
+
+		if (hour > 12) {
+			time = hour_str + ':' + minute_str + ':' + seconds_str + '  PM';
+		} else {
+			time = hour_str + ':' + minute_str + ':' + seconds_str + '  AM';
+		}
+
+		return packageMessage(
+			'broadcast',
+			_source,
+			_destination,
+			_cookie, {
+				username: username,
+				time: time,
+				content: content
+			}
+		);
+	}
 
 	/**
 	 *  清屏函数
@@ -177,9 +177,10 @@
 				break;
 		}
 	}
+
 	function updateMessageBox_File(message) {
-		$('#chat-dynamic').append('<p><b>(' + message.time + ') ' + message.username  +
-			' : </b>' + message.content.filename  +
+		$('#chat-dynamic').append('<p><b>(' + message.time + ') ' + message.username +
+			' : </b>' + message.content.filename +
 			'<a target="_blank" href=' + message.address + '>' + ' 下载 </a>' + '</p>');
 		var scrollHeight = $('#chat-dynamic').height() - $('#chat-box').height();
 		$('#chat-box').scrollTop(scrollHeight);
@@ -195,11 +196,17 @@
 	 *	updateChatList() function
 	 *
 	 **/
-	function updateChatList(namelist) {
-		if (namelist === undefined) return;
+	function updateChatList(userlist) {
+		var dropdownBtnStr = "<button id='dropdownBtn' type='button' class='dropdown-toggle' " +
+			"data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>" +
+			"<span class='caret'></span></button>" +
+			"<ul role='menu' class='dropdown-menu' aria-labelledby='dropdownBtn'>" +
+			"<li role='presentaion'><a href='/P2P'>和他单独聊天</a></li>" + 
+			"<li role='presentaion'><a href='#'>查看个人资料</a></li></ul>";
+		if (userlist === undefined) return;
 		var chatlist = "";
-		for (var i = 0; i < namelist.length; i++) {
-			chatlist = chatlist + "<tr><td width='100px'>" + namelist[i] + "</td></tr>";
+		for (var i = 0; i < userlist.length; i++) {
+			chatlist = chatlist + "<tr><td class='dropdown' width='100px'>" + userlist[i].username + dropdownBtnStr + "</td></tr>";
 		}
 		$('#chat-list').html(chatlist);
 	}
@@ -224,16 +231,17 @@
 				handleChatListError();
 				break;
 			case 500:
+				console.log(response.data);
 				updateMessageBox(response.data);
 				break;
 		}
 	});
 
 	//主动获取chatList
-	$(document).ready(function(){  
-    setUser();
-    getChatList();  
-	}); 
+	$(document).ready(function() {
+		setUser();
+		getChatList();
+	});
 	/**
 	 *  发送消息
 	 **/

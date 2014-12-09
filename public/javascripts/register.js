@@ -56,7 +56,7 @@
 			}
 			if (response.statusCode == 100) {
 				alert('恭喜！注册成功！');
-				window.location = '/chat?'+$('#register-username input').val();
+				window.location = '/chat?username='+$('#register-username input').val();
 			}
 		});
 
