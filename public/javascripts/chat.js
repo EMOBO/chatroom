@@ -193,6 +193,7 @@
 			setTimeout(function(){
 				$('#file-' + message.content.fileNumber + '-box>p>a').attr('href', message.address);
 				$('#file-' + message.content.fileNumber + '-box>p>a>img').attr('src', 'img/filedone.png');
+				$('#file-' + message.content.fileNumber + '-box>p').css('background-color', '#9DFFB0');
 				$('#file-' + message.content.fileNumber + '-bar').remove();
 			}, 1000);
 		}
