@@ -11,6 +11,7 @@ var UPLOAD_PATH = 'upload/';
  *	writeStream 是文件的流
  **/
 var File = [];
+fileNumber =0;
 exports.handle = function(socket, message) {
 	var _source = {
 		ip: message.destination.ip,
@@ -53,6 +54,7 @@ exports.handle = function(socket, message) {
 			if (File[message.data.content.filename].File_End) {
 				File[message.data.content.filename].writeStream.end();
 				delete File[message.data.content.filename];
+				console.log(File);
 
 			}
 			break;
@@ -87,7 +89,6 @@ function fileHandler(message, writeStream) {
 			});
 		}
 	});
-	console.log(File);
 	File[message.data.content.filename].FileUploadPionter += message.data.content.content.data.length;
 	var responseData = {
 		username: message.data.username,
@@ -97,14 +98,15 @@ function fileHandler(message, writeStream) {
 			filename : message.data.content.filename,
 			percentage: Math.floor((File[message.data.content.filename].FileUploadPionter /
 					message.data.content.filesize) * 100),
-			address : null
+			address : null,
+			fileNumber: fileNumber
 		}
 	};
 	if (message.data.content.content.Final) {
 		File[message.data.content.filename].File = 0;
-		responseData.address = message.destination.ip + ':' +
-		message.destination.port+ '/' + UPLOAD_PATH +
-		message.data.content.filename;
+		File[message.data.content.filename].File_End = true;
+		responseData.address = message.data.content.filename;
+		fileNumber++;
 
 	}
 	return responseData;

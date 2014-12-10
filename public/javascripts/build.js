@@ -2,7 +2,7 @@
 	/*********************************** variable ******************************/
 	var FILE_TYPE = 'FILE';
 	var TEXT_TYPE = 'TEXT';
-	var FILE_LIMITSIZE = 5120000;
+	var FILE_LIMITSIZE = 5242880;
 	var file = {
 		name: '',
 		file: '',
@@ -20,50 +20,50 @@
 
 	/************************************ function ********************************/
 	function message(type, cont, filename) {
-			var content;
-			var username = USERNAME;
-			var date = new Date(),
-				time;
-			var hour = date.getHours(),
-				minute = date.getMinutes(),
-				seconds = date.getSeconds();
-			var hour_str = (hour > 9) ? hour.toString() : ('0' + hour.toString()),
-				minute_str = (minute > 9) ? minute.toString() : ('0' + minute.toString()),
-				seconds_str = (seconds > 9) ? seconds.toString() : ('0' + seconds.toString());
-			switch (type) {
-				case FILE_TYPE:
-					content = {
-						type: FILE_TYPE,
-						filename: filename,
-						filesize: file.size,
-						content: cont
-					};
-					break;
-				case TEXT_TYPE:
-					content = {
-						type: TEXT_TYPE,
-						content: cont
-					};
-					break;
-			}
-
-			if (hour > 12) {
-				time = hour_str + ':' + minute_str + ':' + seconds_str + '  PM';
-			} else {
-				time = hour_str + ':' + minute_str + ':' + seconds_str + '  AM';
-			}
-
-			return packageMessage(
-				'broadcast',
-				_source,
-				_destination,
-				_cookie, {
-					username: username,
-					time: time,
-					content: content
-				}
-			);
+		var content;
+		var username = USERNAME;
+		var date = new Date(),
+			time;
+		var hour = date.getHours(),
+			minute = date.getMinutes(),
+			seconds = date.getSeconds();
+		var hour_str = (hour > 9) ? hour.toString() : ('0' + hour.toString()),
+			minute_str = (minute > 9) ? minute.toString() : ('0' + minute.toString()),
+			seconds_str = (seconds > 9) ? seconds.toString() : ('0' + seconds.toString());
+		switch (type) {
+			case FILE_TYPE:
+				content = {
+					type: FILE_TYPE,
+					filename: filename,
+					filesize: file.size,
+					content: cont
+				};
+				break;
+			case TEXT_TYPE:
+				content = {
+					type: TEXT_TYPE,
+					content: cont
+				};
+				break;
 		}
+
+		if (hour > 12) {
+			time = hour_str + ':' + minute_str + ':' + seconds_str + '  PM';
+		} else {
+			time = hour_str + ':' + minute_str + ':' + seconds_str + '  AM';
+		}
+
+		return packageMessage(
+			'broadcast',
+			_source,
+			_destination,
+			_cookie, {
+				username: username,
+				time: time,
+				content: content
+			}
+		);
+	}
 
 	/**
 	 *  清屏函数
@@ -102,11 +102,11 @@
 	 **/
 	function sendMessage() {
 		var startPoint = 0,
-			endPoint = file.size;
+			endPoint = file.file.size;
 		var FINISHREAD = true;
 		if ($("#file-upload").val() !== '') {
 			/**
-			 * 这里是用的一个闭包方法取消忙等待
+			 * 这里是用的一个闭包方法取消忙等待（to do）
 			 **/
 			fileRead(fileSplice(startPoint, endPoint, file.file));
 		} else {
@@ -117,7 +117,7 @@
 		$('#file-upload').val('');
 
 		fileReader.onprogress = function(event) {
-			console.log(event.lengthComputable, event.loaded, event.total);
+			//console.log(event.lengthComputable, event.loaded, event.total);
 		};
 
 		fileReader.onerror = function() {
@@ -132,7 +132,9 @@
 			}, file.name));
 			FINISHREAD = true;
 			startPoint += FILE_LIMITSIZE;
-			return fileRead(fileSplice(startPoint, endPoint, file.file));
+			return (function() {
+				fileRead(fileSplice(startPoint, endPoint, file.file));
+			})();
 
 		};
 
@@ -170,6 +172,8 @@
 	function updateMessageBox(message) {
 		switch (message.content.type) {
 			case FILE_TYPE:
+				if ($('#file-' + message.content.fileNumber + '-bar>.progress-bar').css('width') === undefined)
+					createFileMessageBox(message);
 				updateMessageBox_File(message);
 				break;
 			case TEXT_TYPE:
@@ -177,10 +181,33 @@
 				break;
 		}
 	}
+
 	function updateMessageBox_File(message) {
-		$('#chat-dynamic').append('<p><b>(' + message.time + ') ' + message.username  +
-			' : </b>' + message.content.filename  +
-			'<a target="_blank" href=' + message.address + '>' + ' 下载 </a>' + '</p>');
+		//console.log(message);
+		if (message.address === undefined) {
+			$('#file-' + message.content.fileNumber + '-bar>.progress-bar').css('width', message.content.percentage + '%');
+			$('#file-' + message.content.fileNumber + '-bar>.progress-bar').text(message.content.percentage + '%');
+		} else {
+			$('#file-' + message.content.fileNumber + '-bar>.progress-bar').css('width', '100%');
+			$('#file-' + message.content.fileNumber + '-bar>.progress-bar').text('100%');
+			setTimeout(function(){
+				$('#file-' + message.content.fileNumber + '-box>p>a').attr('href', message.address);
+				$('#file-' + message.content.fileNumber + '-box>p>a>img').attr('src', 'img/filedone.png');
+				$('#file-' + message.content.fileNumber + '-bar').remove();
+			}, 1000);
+		}
+	}
+
+	function createFileMessageBox(message) {
+		var element = '<div class="fileBox" id="file-' + message.content.fileNumber + '-box"><p><b>(' + message.time + ') ' + message.username +
+			' : </b>' + message.content.filename +
+			'<a target="_blank"><img src = "img/loading2.gif"></img></a></p><div id="file-' +
+			message.content.fileNumber +
+			'-bar" class="progress"><div class="progress-bar" role="progressbar"' +
+			' aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">0%' +
+			'</div></div></div>';
+		$('#chat-dynamic').append(element);
+		$('#file-' + message.content.fileNumber + '-bar').css('width', $('#file-' + message.content.fileNumber + '-box>p').css('width'));
 		var scrollHeight = $('#chat-dynamic').height() - $('#chat-box').height();
 		$('#chat-box').scrollTop(scrollHeight);
 	}
@@ -230,10 +257,10 @@
 	});
 
 	//主动获取chatList
-	$(document).ready(function(){  
-    setUser();
-    getChatList();  
-	}); 
+	$(document).ready(function() {
+		setUser();
+		getChatList();
+	});
 	/**
 	 *  发送消息
 	 **/
@@ -246,8 +273,6 @@
 	//点击发送按钮
 	$('#send-message').click(function() {
 		if (isFileExist()) {
-			//console.log($("#file-upload")[0].files);
-			//fileRead();
 			sendMessage();
 		} else {
 			sendMessage();
@@ -273,7 +298,6 @@
 			file.name = ($("#file-upload")[0].files)[0].name;
 			file.file = ($("#file-upload")[0].files)[0];
 			file.size = file.file.size;
-			console.log(file);
 			//fileRead();
 		} else {
 			file = {
@@ -285,6 +309,17 @@
 	});
 
 
+})();;(function(){
+	var socket = io();
+	$("#message-send").click(function() {
+		console.log($("#message-input").val());
+		socket.emit('chat message', $("#message-input").val());
+		$("message-input").val('');
+	});
+	socket.on('chat message', function(msg) {
+		console.log(msg);
+		$("#chatroom").append($("<p>").text(msg));
+	});
 })();;(function() {
 	var socket = io();
 	var _source = '';
@@ -323,7 +358,6 @@
 		});
 
 		socket.on('response', function(response) {
-			console.log(response);
 			if (response.statusCode == 204) {
 				alert(response.data);
 				$('#login-password input').val('');
@@ -366,7 +400,6 @@
 
 		//接受报文
 		socket.on('response', function(response) {
-			console.log(response);
 			if (response.statusCode == 304) {
 				alert(response.data);
 			}

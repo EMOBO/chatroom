@@ -15,8 +15,8 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
-
+app.use(express.static(path.join(__dirname, '/public')));
+app.use(express.static(path.join(__dirname, '/upload')));
 // development error handler
 // will print stacktrace
 if (app.get('env') === 'development') {
@@ -58,7 +58,6 @@ db.getConnection(function(db) {
     app.use('/', require('./routes/index'));
     app.use('/register', require('./routes/register'));
     app.use('/chat', require('./routes/chat'));
-
     //启动服务器(绑定socket.io)
     var server = require('http').Server(app);
     server.listen(3000);
