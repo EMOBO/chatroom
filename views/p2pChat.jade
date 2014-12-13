@@ -5,7 +5,7 @@ block content
     h4#online-list-header ★私聊对象★
     div#online-list-body
       table.table.table-hover
-        tbody#p2pUsername
+        tbody#p2p-list
 
     div#separator
 
@@ -23,5 +23,4 @@ block content
           ul.dropdown-menu(role='menu' aria-labelledby='dropdown-upload')
             input#p2p-file-upload(type="file" name="file")
         button(style='margin-right: 50px;')#clean-box.btn.btn-primary 清屏
-        button#logout.btn.btn-danger 登出
-
+        a(href='javascript:self.close()').btn.btn-danger 返回大厅

@@ -211,10 +211,10 @@
 				userlist[i].username + "</span>" + dropdownBtnStr + "</td></tr>";
 		}
 		$('#chat-list').html(chatlistHtml);
-		$('.p2pChat').each(function() {
+		$('.p2pChat a').each(function() {
 			$(this).click(function() {
 				var p2pFromUsername = window.location.toString().split('username=')[1];
-				var p2pToUsername = $(this).parent('ul').prev().prev().text();
+				var p2pToUsername = $(this).parent('li').parent('ul').prev().prev().text();
 				var roomID = p2pFromUsername + '~' + p2pToUsername;
 				socket.emit('message', packageMessage(
 					'p2pChatReq',
@@ -227,7 +227,7 @@
 					}
 				));
 				alert('邀请成功，即将跳转到私聊房间');
-				window.open('/p2pChat?username=' + p2pFromUsername + '&&roomID=' + roomID);
+				window.open('/p2pChat?username=' + p2pFromUsername + '&&roomID=' + roomID, '_blank');
 			});
 		});
 	}
@@ -237,7 +237,7 @@
 		var roomID = response.data.roomID;
 		if(response.data.p2pToUser.username == curUsername) {
 			alert(response.data.p2pFromUser.username + '想和你私聊，即将跳转到私聊房间');
-			window.open('/p2pChat?username=' + curUsername + '&&roomID=' + roomID);
+			window.open('/p2pChat?username=' + curUsername + '&&roomID=' + roomID, '_blank');
 		}
 	}
 
@@ -425,12 +425,8 @@
       size: 0
     };
     var socket = io();
-    var IP;
     var _source;
-    var _destination = {
-      ip: '127.0.0.1',
-      portaddr: '3000'
-    };
+    var _destination;
     var _cookie = 'cookie null';
     var fileReader = new FileReader();
 
@@ -583,21 +579,39 @@
       $('#p2pChat-box').scrollTop(scrollHeight);
     }
 
-    function setUsername() {
-      // var p2pUsername = window.location
-      // $('#p2pUsername').html()
+    function setUpWelcomeInfo(welcomeInfo) {
+      var curUsername = window.location.toString().split('?username=')[1].split('&&')[0];
+      var hisName;
+      if (curUsername == welcomeInfo.p2pFromUser.username) {
+        hisName = welcomeInfo.p2pToUser.username;
+        _source = {
+          ip: welcomeInfo.p2pFromUser.ip,
+          portaddr: welcomeInfo.p2pFromUser.port
+        };
+        _destination = {
+          ip: welcomeInfo.p2pToUser.ip,
+          portaddr: welcomeInfo.p2pToUser.port
+        };
+      } else {
+        hisName = welcomeInfo.p2pFromUser.username;
+        _source = {
+          ip: welcomeInfo.p2pToUser.ip,
+          portaddr: welcomeInfo.p2pToUser.port
+        };
+        _destination = {
+          ip: welcomeInfo.p2pFromUser.ip,
+          portaddr: welcomeInfo.p2pFromUser.port
+        };
+      }
+
+      var p2pUsername = "<tr><td width='100px'><span>" + hisName + "</span></td></tr>";
+      $('#p2p-list').html(p2pUsername);
     }
 
     /*************************************** Event ********************************/
 
-    socket.on('welcome', function(ip) {
-      IP = ip;
-      _source = {
-        ip: IP,
-        portaddr: '8888'
-      };
-
-      setUsername();
+    socket.on('p2pWelcome', function(welcomeInfo) {
+      setUpWelcomeInfo(welcomeInfo);
     });
 
     socket.on('p2pMessage', function(p2pMessage) {
@@ -624,6 +638,10 @@
       } else {
         sendMessage();
       }
+    });
+    //点击返回按钮
+    $('#go-back').click(function() {
+      
     });
     // 改变input file
     $("#file-upload").change(function() {

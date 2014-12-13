@@ -73,7 +73,7 @@ db.getConnection(function(db) {
         console.log('客户端的IP为：' + socket.handshake.address);
         console.log('请求的路径：' + socket.handshake.headers.referer);
         if (socket.handshake.headers.referer.toString().indexOf('p2pChat') > 0) {
-            p2pChattingHandler.handle(io, socket);
+            p2pChattingHandler.handle(io, socket, chatList);
         }
         socket.emit('welcome', socket.handshake.address);
         socket.on('message', function(message) {
@@ -106,7 +106,7 @@ db.getConnection(function(db) {
         });
 
         socket.on('disconnect', function() {
-            console.log('\n服务器：连接已关闭');
+            console.log('服务器：连接已关闭');
         });
     });
 });

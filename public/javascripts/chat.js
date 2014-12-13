@@ -211,10 +211,10 @@
 				userlist[i].username + "</span>" + dropdownBtnStr + "</td></tr>";
 		}
 		$('#chat-list').html(chatlistHtml);
-		$('.p2pChat').each(function() {
+		$('.p2pChat a').each(function() {
 			$(this).click(function() {
 				var p2pFromUsername = window.location.toString().split('username=')[1];
-				var p2pToUsername = $(this).parent('ul').prev().prev().text();
+				var p2pToUsername = $(this).parent('li').parent('ul').prev().prev().text();
 				var roomID = p2pFromUsername + '~' + p2pToUsername;
 				socket.emit('message', packageMessage(
 					'p2pChatReq',
@@ -227,7 +227,7 @@
 					}
 				));
 				alert('邀请成功，即将跳转到私聊房间');
-				window.open('/p2pChat?username=' + p2pFromUsername + '&&roomID=' + roomID);
+				window.open('/p2pChat?username=' + p2pFromUsername + '&&roomID=' + roomID, '_blank');
 			});
 		});
 	}
@@ -237,7 +237,7 @@
 		var roomID = response.data.roomID;
 		if(response.data.p2pToUser.username == curUsername) {
 			alert(response.data.p2pFromUser.username + '想和你私聊，即将跳转到私聊房间');
-			window.open('/p2pChat?username=' + curUsername + '&&roomID=' + roomID);
+			window.open('/p2pChat?username=' + curUsername + '&&roomID=' + roomID, '_blank');
 		}
 	}
 
