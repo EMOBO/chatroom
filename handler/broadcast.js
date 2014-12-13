@@ -71,6 +71,8 @@ exports.handle = function(socket, message) {
 	// 	_destination,
 	// 	message.data
 	// );
+	console.log('服务器将为' + message.data.username + '广播broadcast消息：');
+	console.log(message);
 	socket.broadcast.emit('response', response);
 	socket.emit('response', response);
 };
@@ -94,17 +96,17 @@ function fileHandler(message, writeStream) {
 		time: message.data.time,
 		content: {
 			type: FILE_TYPE,
-			filename : message.data.content.filename,
+			filename: message.data.content.filename,
 			percentage: Math.floor((File[message.data.content.filename].FileUploadPionter /
-					message.data.content.filesize) * 100),
-			address : null
+				message.data.content.filesize) * 100),
+			address: null
 		}
 	};
 	if (message.data.content.content.Final) {
 		File[message.data.content.filename].File = 0;
 		responseData.address = message.destination.ip + ':' +
-		message.destination.port+ '/' + UPLOAD_PATH +
-		message.data.content.filename;
+			message.destination.port + '/' + UPLOAD_PATH +
+			message.data.content.filename;
 
 	}
 	return responseData;
@@ -115,6 +117,5 @@ function fileHandler(message, writeStream) {
  *	Return Response.data
  **/
 function textHandler(message) {
-	console.log(message.data);
 	return message.data;
 }

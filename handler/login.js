@@ -27,7 +27,6 @@ exports.handle = function(socket, message, chatList){
 					port: message.source.port
 				};
 				chatList.add(usrObj);
-				console.log(chatList);
 			} else {
 				_statusCode = 204;
 				_data = '密码错误，请输入正确密码！';

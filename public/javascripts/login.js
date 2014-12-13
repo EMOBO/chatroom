@@ -36,7 +36,6 @@
 		});
 
 		socket.on('response', function(response) {
-			console.log(response);
 			if (response.statusCode == 204) {
 				alert(response.data);
 				$('#login-password input').val('');

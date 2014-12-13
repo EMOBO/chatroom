@@ -196,19 +196,49 @@
 	 *	updateChatList() function
 	 *
 	 **/
-	function updateChatList(userlist) {
+	function updateChatList(chatList) {
+		var userlist = chatList.userlist;
 		var dropdownBtnStr = "<button id='dropdownBtn' type='button' class='dropdown-toggle' " +
 			"data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>" +
 			"<span class='caret'></span></button>" +
 			"<ul role='menu' class='dropdown-menu' aria-labelledby='dropdownBtn'>" +
-			"<li role='presentaion'><a href='/P2P'>和他单独聊天</a></li>" + 
-			"<li role='presentaion'><a href='#'>查看个人资料</a></li></ul>";
+			"<li role='presentaion' class='p2pChat'><a>和他单独聊天</a></li>" +
+			"<li role='presentaion'><a>查看个人资料</a></li></ul>";
 		if (userlist === undefined) return;
-		var chatlist = "";
+		var chatlistHtml = "";
 		for (var i = 0; i < userlist.length; i++) {
-			chatlist = chatlist + "<tr><td class='dropdown' width='100px'>" + userlist[i].username + dropdownBtnStr + "</td></tr>";
+			chatlistHtml = chatlistHtml + "<tr><td class='dropdown' width='100px'><span>" +
+				userlist[i].username + "</span>" + dropdownBtnStr + "</td></tr>";
 		}
-		$('#chat-list').html(chatlist);
+		$('#chat-list').html(chatlistHtml);
+		$('.p2pChat').each(function() {
+			$(this).click(function() {
+				var p2pFromUsername = window.location.toString().split('username=')[1];
+				var p2pToUsername = $(this).parent('ul').prev().prev().text();
+				var roomID = p2pFromUsername + '~' + p2pToUsername;
+				socket.emit('message', packageMessage(
+					'p2pChatReq',
+					_source,
+					_destination,
+					_cookie, {
+						roomID: roomID,
+						p2pFromUsername: p2pFromUsername,
+						p2pToUsername: p2pToUsername
+					}
+				));
+				alert('邀请成功，即将跳转到私聊房间');
+				window.open('/p2pChat?username=' + p2pFromUsername + '&&roomID=' + roomID);
+			});
+		});
+	}
+
+	function p2pChatReq(response) {
+		var curUsername = window.location.toString().split('?username=')[1];
+		var roomID = response.data.roomID;
+		if(response.data.p2pToUser.username == curUsername) {
+			alert(response.data.p2pFromUser.username + '想和你私聊，即将跳转到私聊房间');
+			window.open('/p2pChat?username=' + curUsername + '&&roomID=' + roomID);
+		}
 	}
 
 	/*************************************** Event ********************************/
@@ -219,7 +249,11 @@
 			ip: IP,
 			portaddr: '8888'
 		};
-		getChatList();
+		//主动获取chatList
+		$(document).ready(function() {
+			setUser();
+			getChatList();
+		});
 	});
 
 	socket.on('response', function(response) {
@@ -231,17 +265,14 @@
 				handleChatListError();
 				break;
 			case 500:
-				console.log(response.data);
 				updateMessageBox(response.data);
+				break;
+			case 600:
+				p2pChatReq(response);
 				break;
 		}
 	});
 
-	//主动获取chatList
-	$(document).ready(function() {
-		setUser();
-		getChatList();
-	});
 	/**
 	 *  发送消息
 	 **/

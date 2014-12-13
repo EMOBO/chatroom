@@ -12,7 +12,7 @@ exports.handle = function (socket, message, chatList) {
 	};
 	if (chatList.userlist != []) {
 		_statusCode = 400;
-		_data = chatList.userlist;
+		_data = chatList;
 		response = msgHandler.packageResponseMessage(_statusCode, _source, _destination, _data);
 	} else {
 		_statusCode = 404;

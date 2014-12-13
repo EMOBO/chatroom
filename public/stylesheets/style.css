@@ -51,6 +51,10 @@
   float: left;
   margin-top: -5px;
 }
+.dropdown-menu a {
+  text-align: center;
+  cursor: pointer;
+}
 
 #login-form {
   width: 350px;
@@ -72,6 +76,45 @@ body {
 }
 #page_content {
   margin: 0 auto;
+}
+
+#p2pChat-body {
+  width: 83%;
+  height: 470px;
+  display: inline-block;
+}
+#p2pChat-box {
+  padding: 10px;
+  width: 100%;
+  height: 80%;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  display: inline-block;
+  overflow-y: auto;
+  overflow-x: hidden;
+  text-align: left;
+}
+#p2pChat-box p:nth-child(odd) {
+  background-color: #eee;
+}
+#p2pMessage-box {
+  width: 100%;
+  height: 10%;
+  display: inline-block;
+}
+#p2pChat-btns {
+  width: 100%;
+  height: 10%;
+  display: inline-block;
+  text-align: left;
+}
+#p2p-dropdownBtn {
+  float: left;
+  margin-top: -5px;
+}
+.dropdown-menu a {
+  text-align: center;
+  cursor: pointer;
 }
 
 #register-form {
