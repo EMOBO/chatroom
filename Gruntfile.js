@@ -45,7 +45,7 @@ module.exports = function(grunt) {
 		//对js文件进行即时语法检查
 		jshint: {
 			options: {
-				ignores: ['node_modules/**/*', 'public/lib/**/*']
+				ignores: ['node_modules/**/*', 'public/lib/**/*', 'upload/*']
 			},
 
 			beforeConcat: ['**/*.js'],
