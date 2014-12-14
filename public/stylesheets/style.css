@@ -36,6 +36,9 @@
 #chat-box p:nth-child(odd) {
   background-color: #eee;
 }
+#chat-box .fileBox p:nth-child(odd) {
+  background-color: #FFDBDB;
+}
 #message-box {
   width: 100%;
   height: 10%;
@@ -46,6 +49,27 @@
   height: 10%;
   display: inline-block;
   text-align: left;
+}
+.fileBox {
+  display: block;
+}
+.fileBox p {
+  display: inline-block;
+}
+.fileBox p a {
+  display: inline-block;
+  margin: 10px;
+}
+.fileBox p a img {
+  width: 50px;
+  height: 50px;
+}
+.fileBox .progress {
+  vertical-align: text-bottom;
+}
+
+#bar1 {
+  height: 50px;
 }
 
 #login-form {

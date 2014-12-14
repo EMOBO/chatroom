@@ -29,7 +29,6 @@
 
 		//接受报文
 		socket.on('response', function(response) {
-			console.log(response);
 			if (response.statusCode == 304) {
 				alert(response.data);
 			}
