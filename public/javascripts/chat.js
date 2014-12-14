@@ -189,7 +189,7 @@
 		} else {
 			$('#file-' + message.content.fileNumber + '-bar>.progress-bar').css('width', '100%');
 			$('#file-' + message.content.fileNumber + '-bar>.progress-bar').text('100%');
-			setTimeout(function(){
+			setTimeout(function() {
 				$('#file-' + message.content.fileNumber + '-box>p>a').attr('href', message.address);
 				$('#file-' + message.content.fileNumber + '-box>p>a>img').attr('src', 'img/filedone.png');
 				$('#file-' + message.content.fileNumber + '-box>p').css('background-color', '#9DFFB0');
@@ -223,38 +223,43 @@
 	 *
 	 **/
 	function updateChatList(chatList) {
-		console.log(chatList);
 		var userlist = chatList.userlist;
-		var dropdownBtnStr = "<button id='dropdownBtn' type='button' class='dropdown-toggle' " +
-			"data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>" +
-			"<span class='caret'></span></button>" +
-			"<ul role='menu' class='dropdown-menu' aria-labelledby='dropdownBtn'>" +
-			"<li role='presentaion' class='p2pChat'><a>和他单独聊天</a></li>" +
-			"<li role='presentaion'><a>查看个人资料</a></li></ul>";
+		var dropdownBtnStr;
 		if (userlist === undefined) return;
 		var chatlistHtml = "";
 		for (var i = 0; i < userlist.length; i++) {
+			dropdownBtnStr = "<button id='dropdownBtn' type='button' class='dropdown-toggle' " +
+				"data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>" +
+				"<span class='caret'></span></button>" +
+				"<ul role='menu' class='dropdown-menu' aria-labelledby='dropdownBtn'>" +
+				"<li role='presentaion' class='p2pChat'><a username=" + userlist[i].username +
+				">和他单独聊天</a></li><li role='presentaion'><a>查看个人资料</a></li></ul>";
 			chatlistHtml = chatlistHtml + "<tr><td class='dropdown' width='100px'><span>" +
 				userlist[i].username + "</span>" + dropdownBtnStr + "</td></tr>";
+
 		}
 		$('#chat-list').html(chatlistHtml);
 		$('.p2pChat a').each(function() {
 			$(this).click(function() {
-				var p2pFromUsername = window.location.toString().split('username=')[1];
-				var p2pToUsername = $(this).parent('li').parent('ul').prev().prev().text();
-				var roomID = p2pFromUsername + '~' + p2pToUsername;
-				socket.emit('message', packageMessage(
-					'p2pChatReq',
-					_source,
-					_destination,
-					_cookie, {
-						roomID: roomID,
-						p2pFromUsername: p2pFromUsername,
-						p2pToUsername: p2pToUsername
-					}
-				));
-				alert('邀请成功，即将跳转到私聊房间');
-				window.open('/p2pChat?username=' + p2pFromUsername + '&&roomID=' + roomID, '_blank');
+				var confirm = window.confirm('跳转到私聊房间？');
+				if (confirm === true) {
+					var p2pFromUsername = window.location.toString().split('username=')[1];
+					var p2pToUsername = $(this).attr('username');
+					var roomID = p2pFromUsername + '~' + p2pToUsername;
+					socket.emit('message', packageMessage(
+						'p2pChatReq',
+						_source,
+						_destination,
+						_cookie, {
+							roomID: roomID,
+							p2pFromUsername: p2pFromUsername,
+							p2pToUsername: p2pToUsername
+						}
+					));
+					window.open('/p2pChat?username=' + p2pFromUsername + '&&roomID=' + roomID, '_blank');
+				} else {
+					return;
+				}
 			});
 		});
 	}
@@ -262,7 +267,7 @@
 	function p2pChatReq(response) {
 		var curUsername = window.location.toString().split('?username=')[1];
 		var roomID = response.data.roomID;
-		if(response.data.p2pToUser.username == curUsername) {
+		if (response.data.p2pToUser.username == curUsername) {
 			alert(response.data.p2pFromUser.username + '想和你私聊，即将跳转到私聊房间');
 			window.open('/p2pChat?username=' + curUsername + '&&roomID=' + roomID, '_blank');
 		}

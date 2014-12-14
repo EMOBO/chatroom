@@ -205,6 +205,11 @@
       updateMessageBox_Text(p2pMessage);
     });
 
+    socket.on('p2pDisconnect', function(disconnectMsg) {
+      $('#p2p-list').html('');
+      alert(disconnectMsg.message);
+    });
+
     /**
      *  发送消息
      **/
@@ -226,7 +231,7 @@
     });
     //点击返回按钮
     $('#go-back').click(function() {
-      
+      alert('即将退出聊天室');
     });
     // 改变input file
     $("#file-upload").change(function() {
