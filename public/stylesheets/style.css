@@ -75,6 +75,14 @@
 .fileBox .progress {
   vertical-align: text-bottom;
 }
+.receiveImage {
+  height: inherit !important;
+  width: inherit !important;
+}
+
+#bar1 {
+  height: 50px;
+}
 
 #login-form {
   width: 350px;

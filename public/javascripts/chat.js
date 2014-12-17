@@ -1,14 +1,7 @@
 (function() {
 	/*********************************** variable ******************************/
-	var FILE_TYPE = 'FILE';
 	var TEXT_TYPE = 'TEXT';
-	var FILE_LIMITSIZE = 5242880;
-	var file = {
-		name: '',
-		file: '',
-		size: 0
-	};
-	var socket = io();
+	var FILE_TYPE = 'FILE';
 	var IP;
 	var _source;
 	var _destination = {
@@ -16,7 +9,6 @@
 		portaddr: '3000'
 	};
 	var _cookie = 'cookie null';
-	var fileReader = new FileReader();
 
 	/************************************ function ********************************/
 	function message(type, cont, filename) {
@@ -30,22 +22,11 @@
 		var hour_str = (hour > 9) ? hour.toString() : ('0' + hour.toString()),
 			minute_str = (minute > 9) ? minute.toString() : ('0' + minute.toString()),
 			seconds_str = (seconds > 9) ? seconds.toString() : ('0' + seconds.toString());
-		switch (type) {
-			case FILE_TYPE:
-				content = {
-					type: FILE_TYPE,
-					filename: filename,
-					filesize: file.size,
-					content: cont
-				};
-				break;
-			case TEXT_TYPE:
-				content = {
-					type: TEXT_TYPE,
-					content: cont
-				};
-				break;
-		}
+
+		content = {
+			type: TEXT_TYPE,
+			content: cont
+		};
 
 		if (hour > 12) {
 			time = hour_str + ':' + minute_str + ':' + seconds_str + '  PM';
@@ -88,82 +69,13 @@
 	}
 
 
-	/**
-	 * 文件检测函数
-	 **/
-	function isFileExist() {
-		return $("#file-upload").val() !== '';
-	}
-
-
 
 	/**
 	 *  消息发送函数
 	 **/
 	function sendMessage() {
-		var startPoint = 0,
-			endPoint = file.file.size;
-		var FINISHREAD = true;
-		if ($("#file-upload").val() !== '') {
-			/**
-			 * 这里是用的一个闭包方法取消忙等待（to do）
-			 **/
-			fileRead(fileSplice(startPoint, endPoint, file.file));
-		} else {
-			socket.emit('message', message(TEXT_TYPE, $('#message-box input').val()));
-		}
-
+		socket.emit('message', message(TEXT_TYPE, $('#message-box input').val()));
 		$('#message-box input').val('');
-		$('#file-upload').val('');
-
-		fileReader.onprogress = function(event) {
-			//console.log(event.lengthComputable, event.loaded, event.total);
-		};
-
-		fileReader.onerror = function() {
-			console.log("something wrong, CODE: " + fileReader.error.code);
-		};
-
-		fileReader.onload = function() {
-			// 每一个chunk load完发送进入load下一块chunk的过程
-			socket.emit('message', message(FILE_TYPE, {
-				data: fileReader.result,
-				Final: startPoint + FILE_LIMITSIZE >= endPoint ? true : false
-			}, file.name));
-			FINISHREAD = true;
-			startPoint += FILE_LIMITSIZE;
-			return (function() {
-				fileRead(fileSplice(startPoint, endPoint, file.file));
-			})();
-
-		};
-
-		/**
-		 * 文件读取函数
-		 **/
-		function fileRead(f) {
-			if (FINISHREAD) {
-				if (f.size !== 0) {
-					fileReader.readAsBinaryString(f);
-					FINISHREAD = false;
-				}
-			}
-		}
-
-		/**
-		 * 文件分块函数
-		 **/
-		function fileSplice(startPoint, endPoint, f) {
-			try {
-				if (f.slice) {
-					return f.slice(startPoint, startPoint + Math.min(endPoint - startPoint, FILE_LIMITSIZE));
-				}
-			} catch (e) {
-				console.log(e);
-				alert('你的浏览器不支持上传');
-			}
-		}
-
 	}
 
 	/**
@@ -190,11 +102,41 @@
 			$('#file-' + message.content.fileNumber + '-bar>.progress-bar').css('width', '100%');
 			$('#file-' + message.content.fileNumber + '-bar>.progress-bar').text('100%');
 			setTimeout(function() {
-				$('#file-' + message.content.fileNumber + '-box>p>a').attr('href', message.address);
-				$('#file-' + message.content.fileNumber + '-box>p>a>img').attr('src', 'img/filedone.png');
-				$('#file-' + message.content.fileNumber + '-box>p').css('background-color', '#9DFFB0');
+				console.log(message.content.fileType);
+				switch (message.content.fileType) {
+					case 'img':
+						updateMessageBox_Image(message);
+						break;
+					case 'video':
+						updateMessageBox_video(message);
+						break;
+					case 'normal':
+						updateMessageBox_OrdinaryFile(message);
+						break;
+				}
 				$('#file-' + message.content.fileNumber + '-bar').remove();
 			}, 1000);
+		}
+
+		function updateMessageBox_Image(message) {
+			$('#file-' + message.content.fileNumber + '-box>p').html(
+				$('#file-' + message.content.fileNumber + '-box>p').html()
+				.split(message.content.filename).join("图:"));
+			$('#file-' + message.content.fileNumber + '-box>p>a').attr('href', message.address);
+			$('#file-' + message.content.fileNumber + '-box>p>a>img')
+				.attr('src', message.content.filename)
+				.addClass('receiveImage');
+			$('#file-' + message.content.fileNumber + '-box>p').css('background-color', '#9DFFB0');
+		}
+
+		function updateMessageBox_video(message) {
+			updateMessageBox_OrdinaryFile(message);
+		}
+
+		function updateMessageBox_OrdinaryFile(message) {
+			$('#file-' + message.content.fileNumber + '-box>p>a').attr('href', message.address);
+			$('#file-' + message.content.fileNumber + '-box>p>a>img').attr('src', 'img/filedone.png');
+			$('#file-' + message.content.fileNumber + '-box>p').css('background-color', '#9DFFB0');
 		}
 	}
 
@@ -315,11 +257,7 @@
 	});
 	//点击发送按钮
 	$('#send-message').click(function() {
-		if (isFileExist()) {
-			sendMessage();
-		} else {
-			sendMessage();
-		}
+		sendMessage();
 	});
 
 	/**
@@ -335,19 +273,4 @@
 	//点击清屏按钮
 	$('#clean-box').on('click', cleanScreen);
 
-	// 改变input file
-	$("#file-upload").change(function() {
-		if ($('#file-upload').val() !== null) {
-			file.name = ($("#file-upload")[0].files)[0].name;
-			file.file = ($("#file-upload")[0].files)[0];
-			file.size = file.file.size;
-			//fileRead();
-		} else {
-			file = {
-				name: '',
-				file: '',
-				size: 0
-			};
-		}
-	});
 })();

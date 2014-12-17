@@ -50,11 +50,11 @@ exports.handle = function(message) {
 		_destination,
 		fileHandler(message,
 			File[message.data.content.filename].writeStream));
-	console.log(response);
 	if (File[message.data.content.filename].File_End) {
 		File[message.data.content.filename].writeStream.end();
 		delete File[message.data.content.filename];
 	}
+	defineFileType(message.data.content.filename);
 	return response;
 };
 
@@ -77,6 +77,7 @@ function fileHandler(message, writeStream) {
 		time: message.data.time,
 		content: {
 			type: FILE_TYPE,
+			fileType : null,
 			filename: message.data.content.filename,
 			percentage: Math.floor((File[message.data.content.filename].FileUploadPionter /
 				message.data.content.filesize) * 100),
@@ -88,8 +89,31 @@ function fileHandler(message, writeStream) {
 		File[message.data.content.filename].File = 0;
 		File[message.data.content.filename].File_End = true;
 		responseData.address = message.data.content.filename;
+		responseData.content.fileType = defineFileType(responseData.content.filename);
 		fileNumber++;
 
 	}
 	return responseData;
+}
+
+/**
+	*	judge file type is img type or video type
+**/
+function defineFileType(filename) {
+	if (isImage(filename)) {
+		return 'img';
+	}
+	if (isVideo(filename)) {
+		return 'video';
+	} else {
+		return 'normal';
+	}
+}
+
+function isImage(filename) {
+	return (/\.(gif|jpg|jpeg|tiff|png)$/i).test(filename);
+}
+
+function isVideo(filename) {
+	return (/\.(mp4|mkv|avi|rmvb)$/i).test(filename);
 }
