@@ -102,11 +102,41 @@
 			$('#file-' + message.content.fileNumber + '-bar>.progress-bar').css('width', '100%');
 			$('#file-' + message.content.fileNumber + '-bar>.progress-bar').text('100%');
 			setTimeout(function() {
-				$('#file-' + message.content.fileNumber + '-box>p>a').attr('href', message.address);
-				$('#file-' + message.content.fileNumber + '-box>p>a>img').attr('src', 'img/filedone.png');
-				$('#file-' + message.content.fileNumber + '-box>p').css('background-color', '#9DFFB0');
+				console.log(message.content.fileType);
+				switch (message.content.fileType) {
+					case 'img':
+						updateMessageBox_Image(message);
+						break;
+					case 'video':
+						updateMessageBox_video(message);
+						break;
+					case 'normal':
+						updateMessageBox_OrdinaryFile(message);
+						break;
+				}
 				$('#file-' + message.content.fileNumber + '-bar').remove();
 			}, 1000);
+		}
+
+		function updateMessageBox_Image(message) {
+			$('#file-' + message.content.fileNumber + '-box>p').html(
+				$('#file-' + message.content.fileNumber + '-box>p').html()
+				.split(message.content.filename).join("图:"));
+			$('#file-' + message.content.fileNumber + '-box>p>a').attr('href', message.address);
+			$('#file-' + message.content.fileNumber + '-box>p>a>img')
+				.attr('src', message.content.filename)
+				.addClass('receiveImage');
+			$('#file-' + message.content.fileNumber + '-box>p').css('background-color', '#9DFFB0');
+		}
+
+		function updateMessageBox_video(message) {
+			updateMessageBox_OrdinaryFile(message);
+		}
+
+		function updateMessageBox_OrdinaryFile(message) {
+			$('#file-' + message.content.fileNumber + '-box>p>a').attr('href', message.address);
+			$('#file-' + message.content.fileNumber + '-box>p>a>img').attr('src', 'img/filedone.png');
+			$('#file-' + message.content.fileNumber + '-box>p').css('background-color', '#9DFFB0');
 		}
 	}
 
@@ -423,11 +453,8 @@
 			};
 		}
 	});
-<<<<<<< HEAD
 
 
-=======
->>>>>>> 78360d65cf452f5a1ea5750e0a21e95bc2c4d9a8
 })();;(function() {
 	var socket = io();
 	var _source = '';
