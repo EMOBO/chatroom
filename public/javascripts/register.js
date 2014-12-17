@@ -13,7 +13,7 @@
 				alert('密码和用户名不能为空，请重新输入！');
 				clear();
 			} else {
-				//面膜六位以上
+				//密码六位以上
 				if (password.length < 6) {
 					alert('密码至少为6位，请重新输入！');
 					clear();
@@ -56,7 +56,7 @@
 			}
 			if (response.statusCode == 100) {
 				alert('恭喜！注册成功！');
-				window.location = '/chat?'+$('#register-username input').val();
+				window.location = '/chat?username='+$('#register-username input').val();
 			}
 		});
 

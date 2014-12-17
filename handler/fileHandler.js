@@ -54,8 +54,6 @@ exports.handle = function(message) {
 	if (File[message.data.content.filename].File_End) {
 		File[message.data.content.filename].writeStream.end();
 		delete File[message.data.content.filename];
-		console.log(File);
-
 	}
 	return response;
 };

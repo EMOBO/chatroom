@@ -24,6 +24,5 @@ exports.handle = function(message) {
  *	Return Response.data
  **/
 function textHandler(message) {
-	console.log(message.data);
 	return message.data;
 }

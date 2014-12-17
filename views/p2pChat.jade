@@ -1,0 +1,26 @@
+extends layout
+
+block content
+  div#chatroom
+    h4#online-list-header ★私聊对象★
+    div#online-list-body
+      table.table.table-hover
+        tbody#p2p-list
+
+    div#separator
+
+    div#p2pChat-body
+      div#p2pChat-box
+        div#p2pChat-dynamic
+          p(style='font-weight:bold;font-size:20px;text-align:center;') 系统：欢迎来到私聊房间，这里可以说悄悄话哦～
+      div#p2pMessage-box
+        input.form-control(type = 'text' placeholder='按下Enter发送消息(支持HTML标签解析)，按下Esc清屏')
+      div#p2pChat-btns
+        .btn-group.dropup
+          button#p2p-send-message.btn.btn-primary 发送
+          button#p2p-dropdown-upload.btn.dropdown-toggle(data-toggle="dropdown" style="margin-right: 50px;")
+            span.caret
+          ul.dropdown-menu(role='menu' aria-labelledby='dropdown-upload')
+            input#p2p-file-upload(type="file" name="file")
+        button(style='margin-right: 50px;')#clean-box.btn.btn-primary 清屏
+        a#go-back.btn.btn-danger(href='javascript:self.close()') 返回大厅

@@ -1,32 +1,39 @@
 function Chatlist() {
+	this.userlist = [];
+	this.size = 0;
 }
 Chatlist.prototype = {
-	namelist : [],
-	size : 0,
-	isHave : function(usrname) {
-			return this.namelist.some(function(item, index, array) {
-			return (item === usrname);
+	isHave: function(usrObj) {
+		return this.userlist.some(function(item, index, array) {
+			return (item.username === usrObj.username);
 		});
 	},
-	/* add user name into namelist
-	* return true if insert sucessfully
-	* else return false;
-	*/
-	add : function(usrname) {
-		if (this.isHave(usrname)) {
+	/* add user name into userlist
+	 * return true if insert sucessfully
+	 * else return false;
+	 */
+	add: function(usrObj) {
+		if (this.isHave(usrObj)) {
 			return false;
 		}
-		this.namelist.push(usrname);
+		this.userlist.push(usrObj);
 		this.size++;
 		return true;
 	},
 
-	// return removed array of namelist
-	remove : function(usrname) {
-		this.namelist = this.namelist.filter(function(item, index, array) {
-			return (item != usrname);
+	// return removed array of userlist
+	remove: function(username) {
+		this.userlist = this.userlist.filter(function(item, index, array) {
+			return (item.username != username);
 		});
-		return this.namelist;
+		return this.userlist;
+	},
+
+	// find a specific online user
+	find : function(username) {
+		return this.userlist.filter(function(item, index, array) {
+			return (item.username === username);
+		});
 	}
 };
 

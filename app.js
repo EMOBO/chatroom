@@ -47,6 +47,8 @@ var registerHandler = require('./handler/register');
 var loginHandler = require('./handler/login');
 var listHandler = require('./handler/list');
 var broadcastHandler = require('./handler/broadcast');
+var p2pChatReqHandler = require('./handler/p2pChatReq');
+var p2pChattingHandler = require('./handler/p2pChatting');
 var logoutHandler = require('./handler/logout');
 db.getConnection(function(db) {
     app.use(function(req, res, next) {
@@ -58,20 +60,25 @@ db.getConnection(function(db) {
     app.use('/', require('./routes/index'));
     app.use('/register', require('./routes/register'));
     app.use('/chat', require('./routes/chat'));
+    app.use('/p2pChat', require('./routes/p2pChat'));
+
     //启动服务器(绑定socket.io)
     var server = require('http').Server(app);
     server.listen(3000);
     var io = require('socket.io')(server);
-    // manifest online chaters
 
-    io.on('connection', function(socket) {
-        console.log('\n服务器：有新的连接请求');
-        console.log('\n客户端的IP为：' + socket.handshake.address);
-        console.log('\n请求的路径：' + socket.handshake.headers.referer + '\n');
+    //服务器监听
+    io.sockets.on('connection', function(socket) {
+        console.log('服务器：有新的连接请求');
+        console.log('客户端的IP为：' + socket.handshake.address);
+        console.log('请求的路径：' + socket.handshake.headers.referer);
+        if (socket.handshake.headers.referer.toString().indexOf('p2pChat') > 0) {
+            p2pChattingHandler.handle(io, socket, chatList);
+        }
         socket.emit('welcome', socket.handshake.address);
         socket.on('message', function(message) {
             switch (message.action) {
-                //请求在线用户列表
+                     //请求在线用户列表
                 case 'list':
                     listHandler.handle(socket, message, chatList);
                     break;
@@ -82,6 +89,10 @@ db.getConnection(function(db) {
                     //广播消息
                 case 'broadcast':
                     broadcastHandler.handle(socket, message);
+                    break;
+                    //p2pChatReq
+                case 'p2pChatReq':
+                    p2pChatReqHandler.handle(socket, message, chatList);
                     break;
                     //登陆
                 case 'login':
@@ -95,7 +106,7 @@ db.getConnection(function(db) {
         });
 
         socket.on('disconnect', function() {
-            console.log('\n服务器：连接已关闭');
+            console.log('服务器：连接已关闭');
         });
     });
 });

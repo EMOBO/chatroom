@@ -28,7 +28,12 @@ exports.handle = function(socket, message, chatList) {
 				console.log('服务器：添加用户' + message.data.username + '成功');
 				var response = msgHandler.packageResponseMessage(_statusCode, _source, _destination, _data);
 				socket.emit('response', response);
-				chatList.add(message.data.username);
+				var usrObj = {
+					username: message.data.username,
+					ip: message.source.ip,
+					port: message.source.port
+				};
+				chatList.add(usrObj);
 			});
 		}
 	});
