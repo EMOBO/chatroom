@@ -143,7 +143,7 @@
 	function createFileMessageBox(message) {
 		var element = '<div class="fileBox" id="file-' + message.content.fileNumber + '-box"><p><b>(' + message.time + ') ' + message.username +
 			' : </b>' + message.content.filename +
-			'<a target="_blank"><img src = "img/loading2.gif"></img></a></p><div id="file-' +
+			'<a target="_blank"><img src = "img/loading.gif"></img></a></p><div id="file-' +
 			message.content.fileNumber +
 			'-bar" class="progress"><div class="progress-bar" role="progressbar"' +
 			' aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">0%' +
