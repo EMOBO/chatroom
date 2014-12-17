@@ -1,4 +1,5 @@
 var USERNAME = 'Mr.X';
+var socket = io();
 /**
  *  设置用户名函数
  **/
