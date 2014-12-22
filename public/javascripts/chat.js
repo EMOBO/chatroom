@@ -84,7 +84,7 @@
 	function updateMessageBox(message) {
 		switch (message.content.type) {
 			case FILE_TYPE:
-				if ($('#file-' + message.content.fileNumber + '-bar>.progress-bar').css('width') === undefined)
+				if ($('#file-' + message.content.hashCode + '-bar>.progress-bar').css('width') === undefined)
 					createFileMessageBox(message);
 				updateMessageBox_File(message);
 				break;
@@ -96,11 +96,11 @@
 
 	function updateMessageBox_File(message) {
 		if (message.address === undefined) {
-			$('#file-' + message.content.fileNumber + '-bar>.progress-bar').css('width', message.content.percentage + '%');
-			$('#file-' + message.content.fileNumber + '-bar>.progress-bar').text(message.content.percentage + '%');
+			$('#file-' + message.content.hashCode + '-bar>.progress-bar').css('width', message.content.percentage + '%');
+			$('#file-' + message.content.hashCode + '-bar>.progress-bar').text(message.content.percentage + '%');
 		} else {
-			$('#file-' + message.content.fileNumber + '-bar>.progress-bar').css('width', '100%');
-			$('#file-' + message.content.fileNumber + '-bar>.progress-bar').text('100%');
+			$('#file-' + message.content.hashCode + '-bar>.progress-bar').css('width', '100%');
+			$('#file-' + message.content.hashCode + '-bar>.progress-bar').text('100%');
 			setTimeout(function() {
 				console.log(message.content.fileType);
 				switch (message.content.fileType) {
@@ -114,19 +114,19 @@
 						updateMessageBox_OrdinaryFile(message);
 						break;
 				}
-				$('#file-' + message.content.fileNumber + '-bar').remove();
+				$('#file-' + message.content.hashCode + '-bar').remove();
 			}, 1000);
 		}
 
 		function updateMessageBox_Image(message) {
-			$('#file-' + message.content.fileNumber + '-box>p').html(
-				$('#file-' + message.content.fileNumber + '-box>p').html()
+			$('#file-' + message.content.hashCode + '-box>p').html(
+				$('#file-' + message.content.hashCode + '-box>p').html()
 				.split(message.content.filename).join("图:"));
-			$('#file-' + message.content.fileNumber + '-box>p>a').attr('href', message.address);
-			$('#file-' + message.content.fileNumber + '-box>p>a>img')
+			$('#file-' + message.content.hashCode + '-box>p>a').attr('href', message.address);
+			$('#file-' + message.content.hashCode + '-box>p>a>img')
 				.attr('src', message.content.filename)
 				.addClass('receiveImage');
-			$('#file-' + message.content.fileNumber + '-box>p').css('background-color', '#9DFFB0');
+			$('#file-' + message.content.hashCode + '-box>p').css('background-color', '#9DFFB0');
 		}
 
 		function updateMessageBox_video(message) {
@@ -134,22 +134,22 @@
 		}
 
 		function updateMessageBox_OrdinaryFile(message) {
-			$('#file-' + message.content.fileNumber + '-box>p>a').attr('href', message.address);
-			$('#file-' + message.content.fileNumber + '-box>p>a>img').attr('src', 'img/filedone.png');
-			$('#file-' + message.content.fileNumber + '-box>p').css('background-color', '#9DFFB0');
+			$('#file-' + message.content.hashCode + '-box>p>a').attr('href', message.address);
+			$('#file-' + message.content.hashCode + '-box>p>a>img').attr('src', 'img/filedone.png');
+			$('#file-' + message.content.hashCode + '-box>p').css('background-color', '#9DFFB0');
 		}
 	}
 
 	function createFileMessageBox(message) {
-		var element = '<div class="fileBox" id="file-' + message.content.fileNumber + '-box"><p><b>(' + message.time + ') ' + message.username +
+		var element = '<div class="fileBox" id="file-' + message.content.hashCode + '-box"><p><b>(' + message.time + ') ' + message.username +
 			' : </b>' + message.content.filename +
 			'<a target="_blank"><img src = "img/loading.gif"></img></a></p><div id="file-' +
-			message.content.fileNumber +
+			message.content.hashCode +
 			'-bar" class="progress"><div class="progress-bar" role="progressbar"' +
 			' aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">0%' +
 			'</div></div></div>';
 		$('#chat-dynamic').append(element);
-		$('#file-' + message.content.fileNumber + '-bar').css('width', $('#file-' + message.content.fileNumber + '-box>p').css('width'));
+		$('#file-' + message.content.hashCode + '-bar').css('width', $('#file-' + message.content.hashCode + '-box>p').css('width'));
 		var scrollHeight = $('#chat-dynamic').height() - $('#chat-box').height();
 		$('#chat-box').scrollTop(scrollHeight);
 	}

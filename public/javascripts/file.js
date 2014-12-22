@@ -16,7 +16,7 @@
 	};
 	var _cookie = 'cookie null';
 	var fileReader = new FileReader();
-
+	var isFileReaderFinish = false;
 	/************************************ function ********************************/
 	function filePackage(type, cont, filename) {
 		var content;
@@ -84,7 +84,7 @@
 		$('#file-upload').val('');
 
 		fileReader.onprogress = function(event) {
-			console.log(event.lengthComputable, event.loaded, event.total);
+			//console.log(event.lengthComputable, event.loaded, event.total);
 		};
 
 		fileReader.onerror = function() {
