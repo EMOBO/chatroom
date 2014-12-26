@@ -16,7 +16,7 @@
 	};
 	var _cookie = 'cookie null';
 	var fileReader = new FileReader();
-	var isFileReaderFinish = false;
+	var isFileReaderFinish = true;
 	/************************************ function ********************************/
 	function filePackage(type, cont, filename) {
 		var content;
@@ -76,6 +76,7 @@
 			/**
 			 * 这里是用的一个闭包方法取消忙等待（to do）
 			 **/
+			 console.log(file);
 			fileRead(fileSplice(startPoint, endPoint, file.file));
 		} else {
 			alert("你没有选择文件！");
@@ -100,6 +101,10 @@
 			}, file.name));
 			FINISHREAD = true;
 			startPoint += FILE_LIMITSIZE;
+			if (startPoint + FILE_LIMITSIZE >= endPoint) {
+				isFileReaderFinish = true;
+			}
+			console.log(isFileReaderFinish);
 			return (function() {
 				fileRead(fileSplice(startPoint, endPoint, file.file));
 			})();
@@ -149,24 +154,20 @@
 
 	//点击发送按钮
 	$('#send-file').click(function() {
+		console.log($('#file-upload').file);
+		if ($('#file-upload').val() !== null) {
+			if (isFileReaderFinish) {
+				isFileReaderFinish = false;
+				file.name = ($("#file-upload")[0].files)[0].name;
+				file.file = ($("#file-upload")[0].files)[0];
+				file.size = file.file.size;
+			} else {
+				alert("文件 " + file.name + " 正在传输，请稍等.");
+			}
+		}
 		sendFile();
 	});
 
-	// 改变input file
-	$("#file-upload").change(function() {
-		if ($('#file-upload').val() !== null) {
-			file.name = ($("#file-upload")[0].files)[0].name;
-			file.file = ($("#file-upload")[0].files)[0];
-			file.size = file.file.size;
-
-		} else {
-			file = {
-				name: '',
-				file: '',
-				size: 0
-			};
-		}
-	});
 
 
 })();

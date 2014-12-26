@@ -66,7 +66,7 @@
      * 文件检测函数
      **/
     function isFileExist() {
-      return $("#file-upload").val() !== '';
+      return $("#p2p-file-upload").val() !== '';
     }
 
     /**
@@ -222,7 +222,7 @@
     //点击发送按钮
     $('#p2p-send-message').click(function() {
       if (isFileExist()) {
-        //console.log($("#file-upload")[0].files);
+        //console.log($("#p2p-file-upload")[0].files);
         //fileRead();
         sendMessage();
       } else {
@@ -234,10 +234,10 @@
       alert('即将退出聊天室');
     });
     // 改变input file
-    $("#file-upload").change(function() {
-      if ($('#file-upload').val() !== null) {
-        file.name = ($("#file-upload")[0].files)[0].name;
-        file.file = ($("#file-upload")[0].files)[0];
+    $("#p2p-file-upload").change(function() {
+      if ($('#p2p-file-upload').val() !== null) {
+        file.name = ($("#p2p-file-upload")[0].files)[0].name;
+        file.file = ($("#p2p-file-upload")[0].files)[0];
         file.size = file.file.size;
         console.log(file);
         //fileRead();
