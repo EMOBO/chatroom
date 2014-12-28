@@ -1,4 +1,6 @@
 var msgHandler = require('./message');
+var crypto = require('crypto');
+
 var fs = require('fs');
 var File = [];
 var FILE_TYPE = 'FILE';
@@ -72,6 +74,10 @@ function fileHandler(message, writeStream) {
 		}
 	});
 	File[message.data.content.filename].FileUploadPionter += message.data.content.content.data.length;
+	// hash filename to web page update progress bar
+	var hash = crypto.createHash("md5");
+	hash.update(message.data.content.filename);
+	var hashCode = hash.digest('hex');
 	var responseData = {
 		username: message.data.username,
 		time: message.data.time,
@@ -82,7 +88,7 @@ function fileHandler(message, writeStream) {
 			percentage: Math.floor((File[message.data.content.filename].FileUploadPionter /
 				message.data.content.filesize) * 100),
 			address: null,
-			fileNumber: fileNumber
+			hashCode : hashCode
 		}
 	};
 	if (message.data.content.content.Final) {

@@ -84,7 +84,7 @@
 	function updateMessageBox(message) {
 		switch (message.content.type) {
 			case FILE_TYPE:
-				if ($('#file-' + message.content.fileNumber + '-bar>.progress-bar').css('width') === undefined)
+				if ($('#file-' + message.content.hashCode + '-bar>.progress-bar').css('width') === undefined)
 					createFileMessageBox(message);
 				updateMessageBox_File(message);
 				break;
@@ -96,11 +96,11 @@
 
 	function updateMessageBox_File(message) {
 		if (message.address === undefined) {
-			$('#file-' + message.content.fileNumber + '-bar>.progress-bar').css('width', message.content.percentage + '%');
-			$('#file-' + message.content.fileNumber + '-bar>.progress-bar').text(message.content.percentage + '%');
+			$('#file-' + message.content.hashCode + '-bar>.progress-bar').css('width', message.content.percentage + '%');
+			$('#file-' + message.content.hashCode + '-bar>.progress-bar').text(message.content.percentage + '%');
 		} else {
-			$('#file-' + message.content.fileNumber + '-bar>.progress-bar').css('width', '100%');
-			$('#file-' + message.content.fileNumber + '-bar>.progress-bar').text('100%');
+			$('#file-' + message.content.hashCode + '-bar>.progress-bar').css('width', '100%');
+			$('#file-' + message.content.hashCode + '-bar>.progress-bar').text('100%');
 			setTimeout(function() {
 				console.log(message.content.fileType);
 				switch (message.content.fileType) {
@@ -114,19 +114,19 @@
 						updateMessageBox_OrdinaryFile(message);
 						break;
 				}
-				$('#file-' + message.content.fileNumber + '-bar').remove();
+				$('#file-' + message.content.hashCode + '-bar').remove();
 			}, 1000);
 		}
 
 		function updateMessageBox_Image(message) {
-			$('#file-' + message.content.fileNumber + '-box>p').html(
-				$('#file-' + message.content.fileNumber + '-box>p').html()
+			$('#file-' + message.content.hashCode + '-box>p').html(
+				$('#file-' + message.content.hashCode + '-box>p').html()
 				.split(message.content.filename).join("图:"));
-			$('#file-' + message.content.fileNumber + '-box>p>a').attr('href', message.address);
-			$('#file-' + message.content.fileNumber + '-box>p>a>img')
+			$('#file-' + message.content.hashCode + '-box>p>a').attr('href', message.address);
+			$('#file-' + message.content.hashCode + '-box>p>a>img')
 				.attr('src', message.content.filename)
 				.addClass('receiveImage');
-			$('#file-' + message.content.fileNumber + '-box>p').css('background-color', '#9DFFB0');
+			$('#file-' + message.content.hashCode + '-box>p').css('background-color', '#9DFFB0');
 		}
 
 		function updateMessageBox_video(message) {
@@ -134,22 +134,22 @@
 		}
 
 		function updateMessageBox_OrdinaryFile(message) {
-			$('#file-' + message.content.fileNumber + '-box>p>a').attr('href', message.address);
-			$('#file-' + message.content.fileNumber + '-box>p>a>img').attr('src', 'img/filedone.png');
-			$('#file-' + message.content.fileNumber + '-box>p').css('background-color', '#9DFFB0');
+			$('#file-' + message.content.hashCode + '-box>p>a').attr('href', message.address);
+			$('#file-' + message.content.hashCode + '-box>p>a>img').attr('src', 'img/filedone.png');
+			$('#file-' + message.content.hashCode + '-box>p').css('background-color', '#9DFFB0');
 		}
 	}
 
 	function createFileMessageBox(message) {
-		var element = '<div class="fileBox" id="file-' + message.content.fileNumber + '-box"><p><b>(' + message.time + ') ' + message.username +
+		var element = '<div class="fileBox" id="file-' + message.content.hashCode + '-box"><p><b>(' + message.time + ') ' + message.username +
 			' : </b>' + message.content.filename +
 			'<a target="_blank"><img src = "img/loading.gif"></img></a></p><div id="file-' +
-			message.content.fileNumber +
+			message.content.hashCode +
 			'-bar" class="progress"><div class="progress-bar" role="progressbar"' +
 			' aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">0%' +
 			'</div></div></div>';
 		$('#chat-dynamic').append(element);
-		$('#file-' + message.content.fileNumber + '-bar').css('width', $('#file-' + message.content.fileNumber + '-box>p').css('width'));
+		$('#file-' + message.content.hashCode + '-bar').css('width', $('#file-' + message.content.hashCode + '-box>p').css('width'));
 		var scrollHeight = $('#chat-dynamic').height() - $('#chat-box').height();
 		$('#chat-box').scrollTop(scrollHeight);
 	}
@@ -302,7 +302,7 @@
 	};
 	var _cookie = 'cookie null';
 	var fileReader = new FileReader();
-
+	var isFileReaderFinish = true;
 	/************************************ function ********************************/
 	function filePackage(type, cont, filename) {
 		var content;
@@ -362,6 +362,7 @@
 			/**
 			 * 这里是用的一个闭包方法取消忙等待（to do）
 			 **/
+			 console.log(file);
 			fileRead(fileSplice(startPoint, endPoint, file.file));
 		} else {
 			alert("你没有选择文件！");
@@ -370,7 +371,7 @@
 		$('#file-upload').val('');
 
 		fileReader.onprogress = function(event) {
-			console.log(event.lengthComputable, event.loaded, event.total);
+			//console.log(event.lengthComputable, event.loaded, event.total);
 		};
 
 		fileReader.onerror = function() {
@@ -386,6 +387,10 @@
 			}, file.name));
 			FINISHREAD = true;
 			startPoint += FILE_LIMITSIZE;
+			if (startPoint + FILE_LIMITSIZE >= endPoint) {
+				isFileReaderFinish = true;
+			}
+			console.log(isFileReaderFinish);
 			return (function() {
 				fileRead(fileSplice(startPoint, endPoint, file.file));
 			})();
@@ -435,24 +440,20 @@
 
 	//点击发送按钮
 	$('#send-file').click(function() {
+		console.log($('#file-upload').file);
+		if ($('#file-upload').val() !== null) {
+			if (isFileReaderFinish) {
+				isFileReaderFinish = false;
+				file.name = ($("#file-upload")[0].files)[0].name;
+				file.file = ($("#file-upload")[0].files)[0];
+				file.size = file.file.size;
+			} else {
+				alert("文件 " + file.name + " 正在传输，请稍等.");
+			}
+		}
 		sendFile();
 	});
 
-	// 改变input file
-	$("#file-upload").change(function() {
-		if ($('#file-upload').val() !== null) {
-			file.name = ($("#file-upload")[0].files)[0].name;
-			file.file = ($("#file-upload")[0].files)[0];
-			file.size = file.file.size;
-
-		} else {
-			file = {
-				name: '',
-				file: '',
-				size: 0
-			};
-		}
-	});
 
 
 })();;(function() {
@@ -612,7 +613,7 @@
      * 文件检测函数
      **/
     function isFileExist() {
-      return $("#file-upload").val() !== '';
+      return $("#p2p-file-upload").val() !== '';
     }
 
     /**
@@ -768,7 +769,7 @@
     //点击发送按钮
     $('#p2p-send-message').click(function() {
       if (isFileExist()) {
-        //console.log($("#file-upload")[0].files);
+        //console.log($("#p2p-file-upload")[0].files);
         //fileRead();
         sendMessage();
       } else {
@@ -780,10 +781,10 @@
       alert('即将退出聊天室');
     });
     // 改变input file
-    $("#file-upload").change(function() {
-      if ($('#file-upload').val() !== null) {
-        file.name = ($("#file-upload")[0].files)[0].name;
-        file.file = ($("#file-upload")[0].files)[0];
+    $("#p2p-file-upload").change(function() {
+      if ($('#p2p-file-upload').val() !== null) {
+        file.name = ($("#p2p-file-upload")[0].files)[0].name;
+        file.file = ($("#p2p-file-upload")[0].files)[0];
         file.size = file.file.size;
         console.log(file);
         //fileRead();
