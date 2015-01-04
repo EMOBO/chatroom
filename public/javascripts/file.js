@@ -72,15 +72,7 @@
 		var startPoint = 0,
 			endPoint = file.file.size;
 		var FINISHREAD = true;
-		if ($("#file-upload").val() !== '') {
-			/**
-			 * 这里是用的一个闭包方法取消忙等待（to do）
-			 **/
-			 console.log(file);
-			fileRead(fileSplice(startPoint, endPoint, file.file));
-		} else {
-			alert("你没有选择文件！");
-		}
+		fileRead(fileSplice(startPoint, endPoint, file.file));
 
 		$('#file-upload').val('');
 
@@ -151,23 +143,21 @@
 		};
 	});
 
-
 	//点击发送按钮
 	$('#send-file').click(function() {
 		console.log($('#file-upload').file);
-		if ($('#file-upload').val() !== null) {
+		if ($('#file-upload').val() !== '') {
 			if (isFileReaderFinish) {
 				isFileReaderFinish = false;
 				file.name = ($("#file-upload")[0].files)[0].name;
 				file.file = ($("#file-upload")[0].files)[0];
 				file.size = file.file.size;
+				sendFile();
 			} else {
 				alert("文件 " + file.name + " 正在传输，请稍等.");
 			}
+		} else {
+			alert('请先选择文件');
 		}
-		sendFile();
 	});
-
-
-
 })();

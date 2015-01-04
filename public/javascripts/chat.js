@@ -9,6 +9,7 @@
 		portaddr: '3000'
 	};
 	var _cookie = 'cookie null';
+	var socket = io();
 
 	/************************************ function ********************************/
 	function message(type, cont, filename) {
@@ -28,7 +29,7 @@
 			content: cont
 		};
 
-		if (hour > 12) {
+		if (hour >= 12) {
 			time = hour_str + ':' + minute_str + ':' + seconds_str + '  PM';
 		} else {
 			time = hour_str + ':' + minute_str + ':' + seconds_str + '  AM';
@@ -51,7 +52,6 @@
 	 **/
 	function cleanScreen() {
 		$('#chat-dynamic').empty();
-		$('#chat-dynamic').append("<p style='font-weight:bold;font-size:20px;text-align:center;')> 系统：欢迎来到聊天室大厅</p>");
 	}
 
 	/*	*
@@ -142,21 +142,21 @@
 
 	function createFileMessageBox(message) {
 		var element = '<div class="fileBox" id="file-' + message.content.hashCode + '-box"><p><b>(' + message.time + ') ' + message.username +
-			' : </b>' + message.content.filename +
-			'<a target="_blank"><img src = "img/loading.gif"></img></a></p><div id="file-' +
+			' : ' + message.content.filename +
+			'</b><a target="_blank"><img src = "img/loading.gif"></img></a></p><div id="file-' +
 			message.content.hashCode +
 			'-bar" class="progress"><div class="progress-bar" role="progressbar"' +
 			' aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">0%' +
 			'</div></div></div>';
 		$('#chat-dynamic').append(element);
 		$('#file-' + message.content.hashCode + '-bar').css('width', $('#file-' + message.content.hashCode + '-box>p').css('width'));
-		var scrollHeight = $('#chat-dynamic').height() - $('#chat-box').height();
+		var scrollHeight = $('#chat-dynamic').height() + 2 * $('#chat-box-header').height() - $('#chat-box').height();
 		$('#chat-box').scrollTop(scrollHeight);
 	}
 
 	function updateMessageBox_Text(message) {
-		$('#chat-dynamic').append('<p><b>(' + message.time + ') ' + message.username + ' : </b>' + message.content.content + '</p>');
-		var scrollHeight = $('#chat-dynamic').height() - $('#chat-box').height();
+		$('#chat-dynamic').append('<p><b>(' + message.time + ') ' + message.username + ' : ' + message.content.content + '</b></p>');
+		var scrollHeight = $('#chat-dynamic').height() + 2 * $('#chat-box-header').height() - $('#chat-box').height();
 		$('#chat-box').scrollTop(scrollHeight);
 	}
 
@@ -175,7 +175,7 @@
 				"<span class='caret'></span></button>" +
 				"<ul role='menu' class='dropdown-menu' aria-labelledby='dropdownBtn'>" +
 				"<li role='presentaion' class='p2pChat'><a username=" + userlist[i].username +
-				">和他单独聊天</a></li><li role='presentaion'><a>查看个人资料</a></li></ul>";
+				">和他单独聊天</a></li></ul>";
 			chatlistHtml = chatlistHtml + "<tr><td class='dropdown' width='100px'><span>" +
 				userlist[i].username + "</span>" + dropdownBtnStr + "</td></tr>";
 
@@ -185,7 +185,7 @@
 			$(this).click(function() {
 				var confirm = window.confirm('跳转到私聊房间？');
 				if (confirm === true) {
-					var p2pFromUsername = window.location.toString().split('username=')[1];
+					var p2pFromUsername = decodeURIComponent(window.location.toString().split('?username=')).split(',')[1];
 					var p2pToUsername = $(this).attr('username');
 					var roomID = p2pFromUsername + '~' + p2pToUsername;
 					socket.emit('message', packageMessage(
@@ -198,7 +198,8 @@
 							p2pToUsername: p2pToUsername
 						}
 					));
-					window.open('/p2pChat?username=' + p2pFromUsername + '&&roomID=' + roomID, '_blank');
+					var p2pURL = '/p2pChat?username=' + p2pFromUsername + '&&roomID=' + roomID; 
+					window.open(p2pURL, '_blank');
 				} else {
 					return;
 				}
@@ -207,11 +208,12 @@
 	}
 
 	function p2pChatReq(response) {
-		var curUsername = window.location.toString().split('?username=')[1];
+		var curUsername = decodeURIComponent(window.location.toString().split('?username=')).split(',')[1];
 		var roomID = response.data.roomID;
 		if (response.data.p2pToUser.username == curUsername) {
 			alert(response.data.p2pFromUser.username + '想和你私聊，即将跳转到私聊房间');
-			window.open('/p2pChat?username=' + curUsername + '&&roomID=' + roomID, '_blank');
+			var p2pURL = '/p2pChat?username=' + curUsername + '&&roomID=' + roomID;
+			window.open(p2pURL, '_blank');
 		}
 	}
 

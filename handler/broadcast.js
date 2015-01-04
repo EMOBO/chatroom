@@ -5,9 +5,7 @@ var textHandler = require('./textHandler');
 var FILE_TYPE = 'FILE';
 var TEXT_TYPE = 'TEXT';
 
-
 exports.handle = function(socket, message) {
-
 	var response;
 	switch (message.data.content.type) {
 		case FILE_TYPE:
@@ -19,7 +17,7 @@ exports.handle = function(socket, message) {
 	}
 	
 	console.log('服务器将为' + message.data.username + '广播broadcast消息：');
-	//console.log(message);
+	// console.log(message);
 	socket.broadcast.emit('response', response);
 	socket.emit('response', response);
 };

@@ -1,3 +1,22 @@
+.dropdown-menu {
+	border: 1px #f4a460 solid !important;
+	border-radius: 0px !important;
+}
+
+.dropdown span {
+	font-weight: bold;
+	color: #4cae4c;
+}
+
+.table tr td {
+	border-top: 1px solid #f4a460 !important;
+}
+
+.table tr td span{
+	font-weight: bold;
+	color: #4cae4c;
+}
+
 #chatroom {
 	padding: 10px;
 }
@@ -9,8 +28,8 @@
 }
 
 #online-list-header {
-	margin-left: 41px;
-	text-align: left;
+	margin-left: auto;
+	text-align: center;
 }
 
 #online-list-body {
@@ -19,7 +38,10 @@
 	overflow: auto;
 	overflow-x: hidden;
 	display: inline-block;
+	background-color: white;
+	border: 1px solid #f4a460 ;
 }
+
 
 #chat-body {
 	width: 83%;
@@ -31,8 +53,7 @@
 	padding: 10px;
 	width: 100%;
 	height: 80%;
-	border: 1px solid #ccc;
-	border-radius: 4px;
+	border: 1px solid #f4a460;
 	display: inline-block;
 	overflow-y: auto;
 	overflow-x: hidden;
@@ -40,17 +61,26 @@
 }
 
 #chat-box p:nth-child(odd) {
-	background-color: #eee;
+	background-color: #f4a460;
 }
 
 #chat-box .fileBox p:nth-child(odd) {
 	background-color: #FFDBDB;
 }
 
+#chat-box-header {
+	text-align: center;
+	border-bottom: 1px solid #f4a460;
+}
+
 #message-box {
 	width: 100%;
 	height: 10%;
 	display: inline-block;
+}
+
+#message-box input {
+	border: 1px solid #f4a460;
 }
 
 #chat-btns {
@@ -78,8 +108,8 @@
 			display: inline-block;
 			margin: 10px;
 			img {
-				width: 100px;
-				height: 100px;
+				width: 50px;
+				height: 50px;
 			}
 
 		}
@@ -92,4 +122,12 @@
 .receiveImage {
 	height: inherit !important;
 	width: inherit !important;
+}
+
+#send-message {
+	border-radius: 4px;
+}
+
+#file-upload {
+	border-radius: 4px !important;
 }

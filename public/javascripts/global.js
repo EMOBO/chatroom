@@ -1,18 +1,10 @@
 var USERNAME = 'Mr.X';
 var socket = io();
-/**
- *  设置用户名函数
- **/
+
 function setUser() {
-    var url = window.location.toString();
-    var info = url.split('?username=');
-    if(info.length > 1){
-        USERNAME = info[1];
-    }
+    USERNAME = decodeURIComponent(window.location.toString().split('?username=')).split(',')[1];
 }
-/**
- *  返回用户名函数
- **/
+
 function getUser() {
     return USERNAME;
 }

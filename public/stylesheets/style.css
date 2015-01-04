@@ -1,3 +1,18 @@
+.dropdown-menu {
+  border: 1px #f4a460 solid !important;
+  border-radius: 0px !important;
+}
+.dropdown span {
+  font-weight: bold;
+  color: #4cae4c;
+}
+.table tr td {
+  border-top: 1px solid #f4a460 !important;
+}
+.table tr td span {
+  font-weight: bold;
+  color: #4cae4c;
+}
 #chatroom {
   padding: 10px;
 }
@@ -7,8 +22,8 @@
   display: inline-block;
 }
 #online-list-header {
-  margin-left: 41px;
-  text-align: left;
+  margin-left: auto;
+  text-align: center;
 }
 #online-list-body {
   width: 15%;
@@ -16,6 +31,8 @@
   overflow: auto;
   overflow-x: hidden;
   display: inline-block;
+  background-color: white;
+  border: 1px solid #f4a460 ;
 }
 #chat-body {
   width: 83%;
@@ -26,23 +43,29 @@
   padding: 10px;
   width: 100%;
   height: 80%;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  border: 1px solid #f4a460;
   display: inline-block;
   overflow-y: auto;
   overflow-x: hidden;
   text-align: left;
 }
 #chat-box p:nth-child(odd) {
-  background-color: #eee;
+  background-color: #f4a460;
 }
 #chat-box .fileBox p:nth-child(odd) {
   background-color: #FFDBDB;
+}
+#chat-box-header {
+  text-align: center;
+  border-bottom: 1px solid #f4a460;
 }
 #message-box {
   width: 100%;
   height: 10%;
   display: inline-block;
+}
+#message-box input {
+  border: 1px solid #f4a460;
 }
 #chat-btns {
   width: 100%;
@@ -69,8 +92,8 @@
   margin: 10px;
 }
 .fileBox p a img {
-  width: 100px;
-  height: 100px;
+  width: 50px;
+  height: 50px;
 }
 .fileBox .progress {
   vertical-align: text-bottom;
@@ -79,23 +102,54 @@
   height: inherit !important;
   width: inherit !important;
 }
-
-#bar1 {
-  height: 50px;
+#send-message {
+  border-radius: 4px;
+}
+#file-upload {
+  border-radius: 4px !important;
 }
 
+html {
+  background-color: #eee8cd;
+}
+input {
+  font-weight: bold !important;
+  font-size: 16px !important;
+  border-radius: 0px !important;
+}
+#htmlWrapper {
+  background-color: #eee8cd;
+}
+hr {
+  border-top: 1px solid #f4a460 !important;
+}
+.btn {
+  border-radius: 0px !important;
+}
+.form-group {
+  text-align: left;
+}
+#logoDiv {
+  height: 150px;
+  width: 40%;
+  margin: 0 auto;
+}
+#logo {
+  height: 100%;
+  width: 100%;
+}
 #login-form {
   width: 350px;
   padding: 30px;
-  border: 1px grey solid;
-  border-radius: 10px;
+  border: 1px #f4a460 solid;
   margin: 0 auto;
-}
-#btn-register {
-  margin-left: 50px;
+  margin-top: 40px;
 }
 #login-form h2 {
-  color: #449d44;
+  color: #333;
+}
+#btn-register {
+  float: right;
 }
 
 body {
@@ -115,20 +169,26 @@ body {
   padding: 10px;
   width: 100%;
   height: 80%;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  border: 1px solid #f4a460;
   display: inline-block;
   overflow-y: auto;
   overflow-x: hidden;
   text-align: left;
 }
 #p2pChat-box p:nth-child(odd) {
-  background-color: #eee;
+  background-color: #f4a460;
 }
 #p2pMessage-box {
   width: 100%;
   height: 10%;
   display: inline-block;
+}
+#p2pChat-box-header {
+  text-align: center;
+  border-bottom: 1px solid #f4a460;
+}
+#p2pMessage-box input {
+  border: 1px solid #f4a460;
 }
 #p2pChat-btns {
   width: 100%;
@@ -148,13 +208,13 @@ body {
 #register-form {
   width: 350px;
   padding: 30px;
-  border: 1px grey solid;
-  border-radius: 10px;
+  border: 1px #f4a460 solid;
   margin: 0 auto;
+  margin-top: 40px;
 }
 #register-form h2 {
-  color: #449d44;
+  color: #333;
 }
 #btn-goback {
-  margin-left: 50px;
+  float: right;
 }

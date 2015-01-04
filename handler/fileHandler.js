@@ -25,7 +25,7 @@ exports.handle = function(message) {
 		port: message.source.port
 	};
 
-	var _statusCode = 500;
+	var _statusCode = (message.action === 'p2pChat') ? 600 : 500;
 	if (!File[message.data.content.filename]) {
 		/** initialize **/
 		File[message.data.content.filename] = {
@@ -83,12 +83,12 @@ function fileHandler(message, writeStream) {
 		time: message.data.time,
 		content: {
 			type: FILE_TYPE,
-			fileType : null,
+			fileType: null,
 			filename: message.data.content.filename,
 			percentage: Math.floor((File[message.data.content.filename].FileUploadPionter /
 				message.data.content.filesize) * 100),
 			address: null,
-			hashCode : hashCode
+			hashCode: hashCode
 		}
 	};
 	if (message.data.content.content.Final) {
@@ -103,8 +103,8 @@ function fileHandler(message, writeStream) {
 }
 
 /**
-	*	judge file type is img type or video type
-**/
+ *	judge file type is img type or video type
+ **/
 function defineFileType(filename) {
 	if (isImage(filename)) {
 		return 'img';

@@ -5,15 +5,11 @@ block content
 			h2 #{title}
 			hr
 			div#register-username.form-group
-				span.lead 用户名
-				input.form-control(type='text')
+				input.form-control(type='text' placeholder='USERNAME')
 			div#register-password.form-group
-				span.lead 密码
-				input.form-control(type='password')
+				input.form-control(type='password' placeholder='PASSWORD')
 			div#register-password-confirm.form-group
-
-				span.lead 重复密码
-				input.form-control(type='password')
+				input.form-control(type='password' placeholder='PASSWORD-REPEAT')
 			div.form-group
-				button#register-apply.btn.btn-success.btn-lg 提交
-				a(href='/')#btn-goback.btn.btn-danger.btn-lg 返回
+				button#register-apply.btn.btn-success.btn-lg SUBMIT
+				a(href='/')#btn-goback.btn.btn-danger.btn-lg CANCEL

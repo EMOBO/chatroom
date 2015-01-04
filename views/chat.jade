@@ -2,8 +2,8 @@ extends layout
 
 block content
 	div#chatroom
-		h4#online-list-header ★在线用户★
 		div#online-list-body
+			h4#online-list-header 在线用户
 			table.table.table-hover
 				tbody#chat-list
 
@@ -11,15 +11,16 @@ block content
 
 		div#chat-body
 			div#chat-box
+				div#chat-box-header
+					h4(style='font-weight:bold;') 系统：欢迎来到聊天室大厅
 				div#chat-dynamic
-					p(style='font-weight:bold;font-size:20px;text-align:center;') 系统：欢迎来到聊天室大厅
 			div#message-box
 				input.form-control(type = 'text' placeholder='按下Enter发送消息(支持HTML标签解析)，按下Esc清屏')
 			div#chat-btns
 				.btn-group.dropup
-					button#send-message.btn.btn-primary(style="margin-right: 50px;") 发送
-					button#send-file.btn.btn-default 发送
-					button.btn.dropdown-toggle(data-toggle="dropdown" style="margin-right: 200px;")
+					button#send-message.btn.btn-primary(style="margin-right: 50px;") 发送消息
+					button#send-file.btn.btn-success 发送文件
+					button.btn.dropdown-toggle(data-toggle="dropdown" style="margin-right: 100px;")
 						span.caret
 					ul.dropdown-menu(role='menu' aria-labelledby='dropdown-upload')
 						input#file-upload(type="file" name="file")

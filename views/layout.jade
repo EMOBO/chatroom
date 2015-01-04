@@ -1,18 +1,17 @@
 doctype html
 html
-  head
-    title= '聊天室 - ' + title
-    meta(http-equiv="Content-Type", content="text/html; charset=utf-8") 
-    link(rel='stylesheet', href='/stylesheets/style.css')
-    link(rel='stylesheet', href='/lib/bootstrap/css/bootstrap.css')
-    link(rel='stylesheet', href='/lib/bootstrap/css/bootstrap-theme.min.css')
-  body
-  div#page_content
-    h1 聊天室
-    div
-      p 欢迎来到聊天室
-    hr
-    block content
+  div#htmlWrapper
+    div#logoDiv
+      img#logo(src='images/logo.png')
+    head
+      title= '聊天室 - ' + title
+      meta(http-equiv="Content-Type", content="text/html; charset=utf-8") 
+      link(rel='stylesheet', href='/stylesheets/style.css')
+      link(rel='stylesheet', href='/lib/bootstrap/css/bootstrap.css')
+      //- link(rel='stylesheet', href='/lib/bootstrap/css/bootstrap-theme.min.css')
+    body
+    div#page_content
+      block content
 
   script(src="/lib/jquery/jquery-1.11.1.min.js")
   script(src="/lib/bootstrap/js/bootstrap.min.js")

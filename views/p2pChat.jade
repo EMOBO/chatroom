@@ -2,8 +2,8 @@ extends layout
 
 block content
   div#chatroom
-    h4#online-list-header ★私聊对象★
     div#online-list-body
+      h4#online-list-header 私聊对象
       table.table.table-hover
         tbody#p2p-list
 
@@ -11,16 +11,18 @@ block content
 
     div#p2pChat-body
       div#p2pChat-box
+        div#p2pChat-box-header
+          h4(style='font-weight:bold') 系统：欢迎来到私聊房间，这里你们可以说悄悄话哟～
         div#p2pChat-dynamic
-          p(style='font-weight:bold;font-size:20px;text-align:center;') 系统：欢迎来到私聊房间，这里可以说悄悄话哦～
       div#p2pMessage-box
         input.form-control(type = 'text' placeholder='按下Enter发送消息(支持HTML标签解析)，按下Esc清屏')
       div#p2pChat-btns
         .btn-group.dropup
-          button#p2p-send-message.btn.btn-primary 发送
-          button#p2p-dropdown-upload.btn.dropdown-toggle(data-toggle="dropdown" style="margin-right: 50px;")
+          button#p2p-send-message(style="margin-right: 50px;").btn.btn-primary 发送消息
+          button#p2p-send-file.btn.btn-success 发送文件
+          button#p2p-dropdown-upload.btn.dropdown-toggle(data-toggle="dropdown" style="margin-right: 100px;")
             span.caret
           ul.dropdown-menu(role='menu' aria-labelledby='dropdown-upload')
             input#p2p-file-upload(type="file" name="file")
-        button(style='margin-right: 50px;')#clean-box.btn.btn-primary 清屏
+        button(style='margin-right: 50px;')#p2p-clean-box.btn.btn-primary 清屏
         a#go-back.btn.btn-danger(href='javascript:self.close()') 返回大厅
