@@ -126,6 +126,7 @@
 			$('#file-' + message.content.hashCode + '-box>p>a>img')
 				.attr('src', message.content.filename)
 				.addClass('receiveImage');
+			console.log($('#file-' + message.content.hashCode + '-box>p>a>img').css('width'), $('#file-' + message.content.hashCode + '-box>p>a>img').css('height'));
 			$('#file-' + message.content.hashCode + '-box>p').css('background-color', '#9DFFB0');
 		}
 

@@ -81,6 +81,11 @@
   text-align: center;
   cursor: pointer;
 }
+.receiveImage {
+  max-width: 1000px;
+  height: inherit !important;
+  width: inherit !important;
+}
 .fileBox {
   display: block;
 }
@@ -97,10 +102,6 @@
 }
 .fileBox .progress {
   vertical-align: text-bottom;
-}
-.receiveImage {
-  height: inherit !important;
-  width: inherit !important;
 }
 #send-message {
   border-radius: 4px;

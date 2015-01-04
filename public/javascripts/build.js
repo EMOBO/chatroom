@@ -126,6 +126,7 @@
 			$('#file-' + message.content.hashCode + '-box>p>a>img')
 				.attr('src', message.content.filename)
 				.addClass('receiveImage');
+			console.log($('#file-' + message.content.hashCode + '-box>p>a>img').css('width'), $('#file-' + message.content.hashCode + '-box>p>a>img').css('height'));
 			$('#file-' + message.content.hashCode + '-box>p').css('background-color', '#9DFFB0');
 		}
 
@@ -760,7 +761,7 @@
   /************************************ function ********************************/
   function filePackage(type, cont, filename) {
     var content;
-    var username = window.location.toString().split('?username=')[1].split('&&')[0];
+    var username = decodeURIComponent(window.location.toString().split('?username=')[1].split('&&')[0]);
     var date = new Date(),
       time;
     var hour = date.getHours(),

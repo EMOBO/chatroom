@@ -20,7 +20,7 @@
   /************************************ function ********************************/
   function filePackage(type, cont, filename) {
     var content;
-    var username = window.location.toString().split('?username=')[1].split('&&')[0];
+    var username = decodeURIComponent(window.location.toString().split('?username=')[1].split('&&')[0]);
     var date = new Date(),
       time;
     var hour = date.getHours(),
