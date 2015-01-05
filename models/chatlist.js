@@ -26,6 +26,7 @@ Chatlist.prototype = {
 		this.userlist = this.userlist.filter(function(item, index, array) {
 			return (item.username != username);
 		});
+		this.size--;
 		return this.userlist;
 	},
 

@@ -166,10 +166,13 @@
 	 *
 	 **/
 	function updateChatList(chatList) {
+		console.log(chatList.size);
 		var userlist = chatList.userlist;
 		var dropdownBtnStr;
 		if (userlist === undefined) return;
 		var chatlistHtml = "";
+
+		$('#online-list-counter').text(chatList.size);
 		for (var i = 0; i < userlist.length; i++) {
 			dropdownBtnStr = "<button id='dropdownBtn' type='button' class='dropdown-toggle' " +
 				"data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>" +

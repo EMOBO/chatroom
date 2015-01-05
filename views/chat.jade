@@ -3,7 +3,9 @@ extends layout
 block content
 	div#chatroom
 		div#online-list-body
-			h4#online-list-header 在线用户
+			div#online-list-header
+				span 在线用户 : 
+				span#online-list-counter 
 			table.table.table-hover
 				tbody#chat-list
 
