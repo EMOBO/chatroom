@@ -7,7 +7,6 @@
 			var password = $('#register-password input').val();
 									USERNAME = username;
 			var passwordComfirm = $('#register-password-confirm input').val();
-			console.log('username:' + username + '|password:' + password + '|passwordComfirm:' + passwordComfirm);
 			//是否为空
 			if ((password === '') || (username === '')) {
 				alert('密码和用户名不能为空，请重新输入！');
@@ -25,7 +24,6 @@
 							password: password
 						};
 						var sourceIp = ip;
-						console.log(sourceIp);
 						var _source = {
 							ip: sourceIp,
 							portaddr: '8888'
@@ -36,8 +34,6 @@
 						};
 						var _cookie = 'cookie null';
 						var message = packageMessage('register', _source, _destination, _cookie, user);
-						console.log(message);
-						console.log(user);
 
 						socket.emit('message', message);
 					} else {

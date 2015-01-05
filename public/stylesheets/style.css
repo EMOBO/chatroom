@@ -2,6 +2,9 @@
   border: 1px #f4a460 solid !important;
   border-radius: 0px !important;
 }
+.dropdown-toggle:hover {
+  border-radius: 0px !important;
+}
 .dropdown span {
   font-weight: bold;
   color: #4cae4c;
@@ -33,7 +36,7 @@
 }
 #online-list-body {
   width: 15%;
-  height: 450px;
+  height: 448px;
   overflow: auto;
   overflow-x: hidden;
   display: inline-block;
@@ -44,6 +47,9 @@
   width: 83%;
   height: 470px;
   display: inline-block;
+}
+#chat-dynamic p {
+  text-shadow: none !important;
 }
 #chat-box {
   padding: 10px;
@@ -159,12 +165,33 @@ hr {
   float: right;
 }
 
+@font-face {
+  font-family: CaviarDreams;
+  src: url('../fonts/CaviarDreams.ttf');
+}
+* {
+  text-shadow: 0px 1px 1px;
+  font-family: CaviarDreams !important;
+}
+input {
+  text-shadow: none;
+}
 body {
   text-align: center;
   overflow: visible;
 }
 #page_content {
   margin: 0 auto;
+}
+button {
+  text-shadow: none;
+  transition: border-radius 0.5s;
+  -moz-transition: border-radius 0.5s;
+  -webkit-transition: border-radius 0.5s;
+  -o-transition: border-radius 0.5s;
+}
+button:hover {
+  border-radius: 20px !important;
 }
 
 #p2pChat-body {

@@ -1,3 +1,17 @@
+@font-face { 
+  font-family: CaviarDreams;
+  src: url('../fonts/CaviarDreams.ttf');
+}
+
+* {
+  text-shadow: 0px 1px 1px;
+  font-family: CaviarDreams !important;
+}
+
+input {
+  text-shadow: none;
+}
+
 body {
 	text-align: center;
 	overflow: visible;
@@ -5,4 +19,16 @@ body {
 
 #page_content {
 	margin: 0 auto;
+}
+
+button {
+  text-shadow: none;
+  transition: border-radius 0.5s;
+  -moz-transition: border-radius 0.5s;
+  -webkit-transition: border-radius 0.5s;
+  -o-transition: border-radius 0.5s;
+}
+
+button:hover {
+  border-radius: 20px !important;
 }

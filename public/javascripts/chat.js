@@ -166,7 +166,6 @@
 	 *
 	 **/
 	function updateChatList(chatList) {
-		console.log(chatList.size);
 		var userlist = chatList.userlist;
 		var dropdownBtnStr;
 		if (userlist === undefined) return;
